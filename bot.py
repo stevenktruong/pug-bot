@@ -2,8 +2,8 @@ import discord
 import re
 from pug import Pug
 from utils import *
+from config import TOKEN
 
-TOKEN = "NDYwNTUwOTc1NzExODcwOTk2.DhGbXg.BFEL7Qmc57vMPnITTaiZbESBGPQ"
 client = discord.Client()
 
 # server_list is of the form
