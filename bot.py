@@ -32,8 +32,7 @@ async def on_message(message):
         help_message += f"{prefix}join [pug name] - Join a PUG with the given name.\n"
         help_message += f"{prefix}leave - Leave whatever PUG you're in.\n"
         help_message += f"{prefix}cancel - If you've created a PUG, this deletes it.\n"
-        help_message += f"{prefix}start - If you've created a PUG, this starts it. While it's active, team members are automatically placed in \n"
-        help_message += f"{prefix}stop - If you've created a PUG, this deletes it.\n"
+        help_message += f"{prefix}start - If you've created a PUG, this starts it. This moves all players to the chosen channels and closes the create lobby.\n"
         help_message += f"{prefix}team [team name] - Once you're in a PUG, you can create your own team with the given name.\n"
         help_message += f"{prefix}pick [number] - If you're team captain, you can pick your teammates with this.\n"
         help_message += f"{prefix}kick [number] - If you're team captain, you can kick your teammates with this.\n"
@@ -161,8 +160,8 @@ async def on_message(message):
     if message.content == f"{prefix}start":
         owned_pug = list(filter(lambda pug: pug.creator == message.author, pugs))
         if owned_pug:
+            # If every team has chosen a channel
             if all(team.channel for team in owned_pug[0].teams):
-                # If every team has chosen a channel
                 # Move the team members to their channel
                 for team in owned_pug[0].teams:
                     for member in team.members:
@@ -172,23 +171,27 @@ async def on_message(message):
                 owned_pug[0].active = True
                 await client.delete_message(owned_pug[0].status)
                 owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
+
+                # Delete all references to the PUG -- it's done
+                pugs.remove(owned_pug)
+                del owned_pug[0]
             else:
                 await client.send_message(message.channel, "Not all teams have chosen their channel yet.")
         else:
             await client.send_message(message.channel, "You don't have any PUGs.")
 
-    ########################################
-    #### Stopping a pug
-    ########################################
-    if message.content == f"{prefix}stop":
-        owned_pug = list(filter(lambda pug: pug.creator == message.author, pugs))
-        if owned_pug:
-            await client.send_message(message.channel, f"Successfully stopped the PUG `{owned_pug[0].name}`.")
-            owned_pug[0].active = False
-            await client.delete_message(owned_pug[0].status)
-            owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
-        else:
-            await client.send_message(message.channel, "You don't have any PUGs.")
+    # ########################################
+    # #### Stopping a pug
+    # ########################################
+    # if message.content == f"{prefix}stop":
+    #     owned_pug = list(filter(lambda pug: pug.creator == message.author, pugs))
+    #     if owned_pug:
+    #         await client.send_message(message.channel, f"Successfully stopped the PUG `{owned_pug[0].name}`.")
+    #         owned_pug[0].active = False
+    #         await client.delete_message(owned_pug[0].status)
+    #         owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
+    #     else:
+    #         await client.send_message(message.channel, "You don't have any PUGs.")
     
     ########################################
     #### Creating a team
