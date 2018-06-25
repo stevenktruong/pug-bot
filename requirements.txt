@@ -1,1 +1,1 @@
-discord-rewrite
+discord-rewrite==1.0.0
