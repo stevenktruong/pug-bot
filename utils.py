@@ -2,7 +2,15 @@ import discord
 
 # Show the PUG status
 def pug_status(pug):
-    color = discord.Color.green() if pug.active else discord.Color.red()
+    if pug.active == 0:   # PUG hasn't started
+        color = discord.Color.red()
+        footer_text = "This PUG has not started yet."
+    elif pug.active == 1: # PUG has started
+        color = discord.Color.green()
+        footer_text = "This PUG has started."
+    elif pug.active == 2: # PUG finished
+        color = discord.Color.blue()
+        footer_text = "This PUG has finished."
 
     pug_embed = discord.Embed(
         title=pug.name,
@@ -10,10 +18,7 @@ def pug_status(pug):
         color=color
     )
 
-    if pug.active:
-        pug_embed.set_footer(text="This PUG has started.")
-    else:
-        pug_embed.set_footer(text="This PUG has not started yet.")
+    pug_embed.set_footer(text=footer_text)
 
     pug_embed.set_author(
         name=pug.creator.name,

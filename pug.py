@@ -2,7 +2,7 @@ from team import Team
 
 class Pug:
 
-    def __init__(self, name, creator, max_size, teams=[], players=[], status=None, active=False):
+    def __init__(self, name, creator, max_size, teams=[], players=[], status=None, active=0):
         """
         `teams` is a dictionary of the following shape:
             {
