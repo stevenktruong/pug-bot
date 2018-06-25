@@ -1,1 +1,2 @@
-discord-rewrite
+discord.py
+asyncio
