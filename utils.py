@@ -10,7 +10,7 @@ def pug_status(pug):
         footer_text = "This PUG has started."
     elif pug.active == 2: # PUG finished
         color = discord.Color.blue()
-        footer_text = "This PUG has finished."
+        footer_text = "This PUG has ended."
 
     pug_embed = discord.Embed(
         title=pug.name,
