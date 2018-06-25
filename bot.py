@@ -34,6 +34,7 @@ async def on_message(message):
         help_message += f"{prefix}team [team name] - Once you're in a PUG, you can create your own team with the given name.\n"
         help_message += f"{prefix}pick [number] - If you're team captain, you can pick your teammates with this.\n"
         help_message += f"{prefix}kick [number] - If you're team captain, you can kick your teammates with this.\n"
+        help_message += f"{prefix}channel - If you're team captain, you can select a voice channel for your team. Enter the number of the voice channel you want.\n"
         help_message += "```"
         await client.send_message(message.author, help_message)
 
