@@ -1,8 +1,11 @@
 import discord
 import re
+import os
 from pug import Pug
 from utils import *
-from config import TOKEN
+import config
+
+TOKEN = os.getenv('TOKEN') if os.getenv('TOKEN') else config.TOKEN
 
 client = discord.Client()
 
