@@ -39,6 +39,7 @@ async def on_message(message):
         help_message += f"{prefix}random [teams] - If you own a PUG, you can randomly create as many teams as you want, if possible.\n"
         help_message += f"{prefix}random captains [teams] - If you own a PUG, you can randomly assign as many captains as you want, if possible.\n"
         help_message += f"{prefix}team [team name] - Once you're in a PUG, you can create your own team with the given name.\n"
+        help_message += f"{prefix}rename [team name] - If you're a team captain, you can rename your team with this command.\n"
         help_message += f"{prefix}pick [number] - If you're team captain, you can pick your teammates with this.\n"
         help_message += f"{prefix}kick [number] - If you're team captain, you can kick your teammates with this.\n"
         help_message += f"{prefix}channel - If you're team captain, you can select a voice channel for your team. Enter the number of the voice channel you want.\n"
@@ -66,7 +67,7 @@ async def on_message(message):
             await client.send_message(message.channel, f"You already have an active PUG named `{owned_pug[0].name}`.")
             return
 
-        trimmed_message = message.content.split(f"{prefix}create ").pop()
+        trimmed_message = " ".join(message.content.split()[1:])
         size_string = trimmed_message.split().pop()
 
         # Scrape the desired PUG size
@@ -106,7 +107,7 @@ async def on_message(message):
     #### Joining a pug
     ########################################
     if message.content.startswith(f"{prefix}join "):
-        pug_name = message.content.split(f"{prefix}join ").pop()
+        pug_name = " ".join(message.content.split()[1:])
         
         # Check if a user is already in a PUG
         existing_pug = list(filter(lambda pug: message.author in pug.players, pugs))
@@ -161,6 +162,7 @@ async def on_message(message):
         else:
             await client.send_message(message.channel, "You don't have any PUGs.")
 
+
     #########################################
     #### Starting a pug
     ########################################
@@ -211,13 +213,17 @@ async def on_message(message):
         if owned_pug:
             split_text = message.content.split()
             try:
-                num_teams = int(split_text.pop())
+                num_teams = int(split_text[-1])
             except:
                 await client.send_message(message.channel, "That wasn't a valid number. Please try again.")
                 return
 
             if num_teams > len(owned_pug[0].players):
                 await client.send_message(message.channel, "There aren't enough people for that many teams. Please try again.")
+                return
+
+            if num_teams <= 0:
+                await client.send_message(message.channel, "The number of teams must be positive. Please try again.")
                 return
 
             # Clear teams
@@ -230,7 +236,7 @@ async def on_message(message):
                 even_number = len(players_copy) - len(players_copy)%num_teams
                 remainder = len(players_copy)%num_teams
 
-                team_sizes = [even_number] * num_teams
+                team_sizes = [int(even_number/num_teams)] * num_teams
 
                 # Randomly pick the team to receive the odd people out
                 for _ in range(remainder):
@@ -250,6 +256,8 @@ async def on_message(message):
                 for i in range(num_teams):
                     owned_pug[0].add_team(players_copy[i])
 
+                await client.delete_message(owned_pug[0].status)
+                owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
         else:
             await client.send_message(message.channel, "You don't have any PUGs.")
     
@@ -262,7 +270,7 @@ async def on_message(message):
             await client.send_message(message.channel, "The input is too long. Try something shorter.")
             return
 
-        team_name = message.content.split(f"{prefix}team ").pop()
+        team_name = " ".join(message.content.split()[1:])
         
         existing_pug = list(filter(lambda pug: message.author in pug.players, pugs))
         if not existing_pug:
@@ -282,6 +290,32 @@ async def on_message(message):
 
 
     ########################################
+    #### Renaming a team
+    ########################################
+    if message.content.startswith(f"{prefix}rename "):
+        existing_pug = list(filter(lambda pug: message.author in pug.players, pugs))
+        if existing_pug:
+            if existing_pug[0].is_captain(message.author):
+                # If the user is a captain
+                new_name = " ".join(message.content.split()[1:])
+
+                if not all(team.name == new_name for team in existing_pug[0].teams):
+                    await client.send_message(message.channel, "A team with that name already exists.")
+                    return
+
+                # If everything goes well
+                existing_pug[0].find_team(message.author).name = new_name
+                
+                await client.delete_message(existing_pug[0].status)
+                existing_pug[0].status = await client.send_message(message.channel, embed=pug_status(existing_pug[0]))
+            else:
+                # If the user is not a captain
+                await client.send_message(message.channel, "Only captains can change a team name.")
+        else:
+            await client.send_message(message.channel, "You're not currently in a PUG.")
+
+
+    ########################################
     #### Picking a team member
     ########################################
     if message.content.startswith(f"{prefix}pick "):
@@ -290,7 +324,7 @@ async def on_message(message):
             if existing_pug[0].is_captain(message.author):
                 # If the user is a captain
                 try:
-                    player_num = int(message.content.split(f"{prefix}pick ").pop())
+                    player_num = int(message.content.split().pop())
                 except:
                     await client.send_message(message.channel, "That wasn't a valid number. Try again.")
                     return
@@ -321,7 +355,7 @@ async def on_message(message):
             if existing_pug[0].is_captain(message.author):
                 # If the user is a captain
                 try:
-                    player_num = int(message.content.split(f"{prefix}kick ").pop())
+                    player_num = int(message.content.split().pop())
                 except:
                     await client.send_message(message.channel, "That wasn't a valid number. Try again.")
                     return
@@ -332,8 +366,8 @@ async def on_message(message):
                     await client.send_message(message.channel, "That wasn't a valid number. Try again.")
                     return
 
+                # await client.send_message(message.channel, f"Removed {current_team.members[player_num-1]} from your team.")
                 existing_pug[0].remove_from_team(message.author, player_num)
-                await client.send_message(message.channel, f"Removed {existing_pug[0].players[player_num-1]} from your team.")
                 await client.delete_message(existing_pug[0].status)
                 existing_pug[0].status = await client.send_message(message.channel, embed=pug_status(existing_pug[0]))
             else:
