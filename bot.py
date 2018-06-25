@@ -1,7 +1,9 @@
 import discord
+from random import shuffle, randint
 import re
 import os
 from pug import Pug
+from team import Team
 from utils import *
 import config
 
@@ -33,6 +35,9 @@ async def on_message(message):
         help_message += f"{prefix}leave - Leave whatever PUG you're in.\n"
         help_message += f"{prefix}cancel - If you've created a PUG, this deletes it.\n"
         help_message += f"{prefix}start - If you've created a PUG, this starts it. This moves all players to the chosen channels and closes the create lobby.\n"
+        help_message += f"{prefix}finish - If you've started a PUG, you can run this command to end it. Afterwards, you will no longer have access to it.\n"
+        help_message += f"{prefix}random [teams] - If you own a PUG, you can randomly create as many teams as you want, if possible.\n"
+        help_message += f"{prefix}random captains [teams] - If you own a PUG, you can randomly assign as many captains as you want, if possible.\n"
         help_message += f"{prefix}team [team name] - Once you're in a PUG, you can create your own team with the given name.\n"
         help_message += f"{prefix}pick [number] - If you're team captain, you can pick your teammates with this.\n"
         help_message += f"{prefix}kick [number] - If you're team captain, you can kick your teammates with this.\n"
@@ -89,7 +94,7 @@ async def on_message(message):
             return
 
         # Create the pug
-        new_pug = Pug(name=pug_name, creator=message.author, max_size=pug_size, teams=[], players=[], active=None)
+        new_pug = Pug(name=pug_name, creator=message.author, max_size=pug_size, teams=[], players=[], active=0)
         pugs.add(new_pug)
         # await client.send_message(message.author, f"Created the PUG `{pug_name}`.")
 
@@ -149,12 +154,14 @@ async def on_message(message):
         if owned_pug:
             await client.send_message(message.channel, f"Successfully deleted the PUG `{owned_pug[0].name}`.")
             await client.delete_message(owned_pug[0].status)
+
+            # Remove all references to the PUG
             pugs.remove(owned_pug[0])
-            del owned_pug[0]
+            # del owned_pug[0]
         else:
             await client.send_message(message.channel, "You don't have any PUGs.")
 
-    ########################################
+    #########################################
     #### Starting a pug
     ########################################
     if message.content == f"{prefix}start":
@@ -168,31 +175,85 @@ async def on_message(message):
                         await client.move_member(member, team.channel)
 
                 await client.send_message(message.channel, f"Successfully started the PUG `{owned_pug[0].name}`.")
-                owned_pug[0].active = True
+                owned_pug[0].active = 1
                 await client.delete_message(owned_pug[0].status)
                 owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
 
-                # Delete all references to the PUG -- it's done
-                pugs.remove(owned_pug)
-                del owned_pug[0]
             else:
                 await client.send_message(message.channel, "Not all teams have chosen their channel yet.")
         else:
             await client.send_message(message.channel, "You don't have any PUGs.")
 
-    # ########################################
-    # #### Stopping a pug
-    # ########################################
-    # if message.content == f"{prefix}stop":
-    #     owned_pug = list(filter(lambda pug: pug.creator == message.author, pugs))
-    #     if owned_pug:
-    #         await client.send_message(message.channel, f"Successfully stopped the PUG `{owned_pug[0].name}`.")
-    #         owned_pug[0].active = False
-    #         await client.delete_message(owned_pug[0].status)
-    #         owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
-    #     else:
-    #         await client.send_message(message.channel, "You don't have any PUGs.")
+
+    ########################################
+    #### Finishing a pug
+    ########################################
+    if message.content == f"{prefix}finish":
+        owned_pug = list(filter(lambda pug: pug.creator == message.author, pugs))
+        if owned_pug:
+            await client.send_message(message.channel, f"Successfully stopped the PUG `{owned_pug[0].name}`.")
+            owned_pug[0].active = 2
+            await client.delete_message(owned_pug[0].status)
+            owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
+
+            # Delete all references to the PUG -- it's done
+            pugs.remove(owned_pug[0])
+            # del owned_pug[0]
+        else:
+            await client.send_message(message.channel, "You don't have any PUGs.")
+
+
+    ########################################
+    #### Randomize teams
+    ########################################
+    if message.content.startswith(f"{prefix}random "):
+        owned_pug = list(filter(lambda pug: pug.creator == message.author, pugs))
+        if owned_pug:
+            split_text = message.content.split()
+            try:
+                num_teams = int(split_text.pop())
+            except:
+                await client.send_message(message.channel, "That wasn't a valid number. Please try again.")
+                return
+
+            if num_teams > len(owned_pug[0].players):
+                await client.send_message(message.channel, "There aren't enough people for that many teams. Please try again.")
+                return
+
+            # Clear teams
+            owned_pug[0].teams = []
+
+            if len(split_text) == 2:
+                # Randomize the team, including captains
+                players_copy = owned_pug[0].players.copy()
+                shuffle(players_copy)
+                even_number = len(players_copy) - len(players_copy)%num_teams
+                remainder = len(players_copy)%num_teams
+
+                team_sizes = [even_number] * num_teams
+
+                # Randomly pick the team to receive the odd people out
+                for _ in range(remainder):
+                    team_sizes[randint(0, num_teams-1)] += 1
+
+                # Assign the teams
+                for (i, team_size) in enumerate(team_sizes):
+                    owned_pug[0].teams.append(Team(name=f"{i+1}", members=players_copy[:team_size]))
+                    players_copy = players_copy[team_size:]
+
+                await client.delete_message(owned_pug[0].status)
+                owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
+            elif len(split_text) == 3 and split_text[1] == "captains":
+                # Randomly pick captains
+                players_copy = owned_pug[0].players.copy()
+                shuffle(players_copy)
+                for i in range(num_teams):
+                    owned_pug[0].add_team(players_copy[i])
+
+        else:
+            await client.send_message(message.channel, "You don't have any PUGs.")
     
+
     ########################################
     #### Creating a team
     ########################################
@@ -280,6 +341,7 @@ async def on_message(message):
                 await client.send_message(message.channel, "Only captains can pick players.")
         else:
             await client.send_message(message.channel, "You're not currently in a PUG.")
+
 
     ########################################
     #### Pick a channel
