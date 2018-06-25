@@ -288,14 +288,14 @@ async def on_message(message):
                 # If the user is a captain
                 # Find all voice channels and ist them
                 channels = []
-                for server in client.servers:
-                    for channel in server.channels:
-                        if channel.type == discord.ChannelType.voice:
-                            channels.append(channel)
+                for channel in message.server.channels:
+                    if channel.type == discord.ChannelType.voice:
+                        channels.append(channel)
 
-                await client.send_message(message.channel, "Pick a channel:")
+                channel_message = "Pick a channel:\n"
                 for (i, channel) in enumerate(channels):
-                    await client.send_message(message.channel, f"{i+1}. {channel}")
+                    channel_message += f"{i+1}. {channel}\n"
+                await client.send_message(message.channel, channel_message)
 
                 # Wait for input
                 result = await client.wait_for_message(author=message.author)
