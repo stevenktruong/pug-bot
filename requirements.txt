@@ -1,2 +1,2 @@
-git+https://github.com/Rapptz/discord.py/archive/master.zip#egg=discord.py[voice]
+discord.py==0.16.12
 asyncio
