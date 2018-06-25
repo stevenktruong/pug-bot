@@ -157,10 +157,19 @@ async def on_message(message):
     if message.content == f"{prefix}start":
         owned_pug = list(filter(lambda pug: pug.creator == message.author, pugs))
         if owned_pug:
-            await client.send_message(message.channel, f"Successfully started the PUG `{owned_pug[0].name}`.")
-            owned_pug[0].active = True
-            await client.delete_message(owned_pug[0].status)
-            owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
+            if all(team.channel for team in owned_pug[0].teams):
+                # If every team has chosen a channel
+                # Move the team members to their channel
+                for team in owned_pug[0].teams:
+                    for member in team.members:
+                        await client.move_member(member, team.channel)
+
+                await client.send_message(message.channel, f"Successfully started the PUG `{owned_pug[0].name}`.")
+                owned_pug[0].active = True
+                await client.delete_message(owned_pug[0].status)
+                owned_pug[0].status = await client.send_message(message.channel, embed=pug_status(owned_pug[0]))
+            else:
+                await client.send_message(message.channel, "Not all teams have chosen their channel yet.")
         else:
             await client.send_message(message.channel, "You don't have any PUGs.")
 
@@ -252,7 +261,7 @@ async def on_message(message):
                 # If everything goes well
                 current_team = existing_pug[0].find_team(message.author)
                 if not 1 <= player_num <= len(current_team.members):
-                    await client.send_message(message.channel, "That wasn't a valid pick. Try again.")
+                    await client.send_message(message.channel, "That wasn't a valid number. Try again.")
                     return
 
                 existing_pug[0].remove_from_team(message.author, player_num)
@@ -265,6 +274,46 @@ async def on_message(message):
         else:
             await client.send_message(message.channel, "You're not currently in a PUG.")
 
+    ########################################
+    #### Pick a channel
+    ########################################
+    if message.content.startswith(f"{prefix}channel"):
+        existing_pug = list(filter(lambda pug: message.author in pug.players, pugs))
+        if existing_pug:
+            if existing_pug[0].is_captain(message.author):
+                # If the user is a captain
+                # Find all voice channels and ist them
+                channels = []
+                for server in client.servers:
+                    for channel in server.channels:
+                        if channel.type == discord.ChannelType.voice:
+                            channels.append(channel)
+
+                await client.send_message(message.channel, "Pick a channel:")
+                for (i, channel) in enumerate(channels):
+                    await client.send_message(message.channel, f"{i+1}. {channel}")
+
+                # Wait for input
+                result = await client.wait_for_message(author=message.author)
+                try:
+                    index = int(result.content)-1
+                except:
+                    await client.send_message(message.channel, "That wasn't a valid number. Try again.")
+                    return
+                
+                # Check if the channel has been taken
+                if all(not team.channel == channels[index] for team in existing_pug[0].teams):
+                    existing_pug[0].find_team(message.author).channel = channels[index]
+                    await client.send_message(message.channel, f"You have successfully set your team's channel to {channels[index].name}.")
+                    await client.delete_message(existing_pug[0].status)
+                    existing_pug[0].status = await client.send_message(message.channel, embed=pug_status(existing_pug[0]))
+                else:
+                    await client.send_message(message.channel, "That channel has been taken already. Try again.")
+            else:
+                # If the user is not a captain
+                await client.send_message(message.channel, "Only captains can pick a channel.")
+        else:
+            await client.send_message(message.channel, "You're not currently in a PUG.")
 
 @client.event
 async def on_ready():

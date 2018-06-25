@@ -33,8 +33,9 @@ def pug_status(pug):
                 for (i, player) in enumerate(team.members):
                     member_list += f"{i+1}. {player.name}\n"
 
+                channel_message = f" (Channel: {team.channel})" if team.channel else ""
                 pug_embed.add_field(
-                    name=f"Team {team.name} — Captain: {team.members[0]}",
+                    name=f"Team {team.name} — Captain: {team.members[0]}{channel_message}",
                     value=member_list,
                     inline=False
                 )

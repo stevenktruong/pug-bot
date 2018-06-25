@@ -1,9 +1,10 @@
 class Team:
 
-    def __init__(self, name, members=[]):
+    def __init__(self, name, members=[], channel=None):
         # The first member is the captain
         self.name = name
         self.members = members
+        self.channel = channel
 
     def change_captain(self, new_captain):
         if not new_captain in self.members:
