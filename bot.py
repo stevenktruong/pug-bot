@@ -299,7 +299,7 @@ async def on_message(message):
                 # If the user is a captain
                 new_name = " ".join(message.content.split()[1:])
 
-                if not all(team.name == new_name for team in existing_pug[0].teams):
+                if not all(not team.name == new_name for team in existing_pug[0].teams):
                     await client.send_message(message.channel, "A team with that name already exists.")
                     return
 
