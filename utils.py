@@ -62,7 +62,7 @@ async def update_status(channel, pug):
             if team.members:
                 member_list = ""
                 for (i, player) in enumerate(team.members):
-                    member_list += f"{i+1}. {player.name}\n"
+                    member_list += f"`[{i+1}]` {player.name}\n"
 
                 channel_message = f" (Channel: {team.channel})" if team.channel else ""
                 new_status.add_field(
@@ -75,9 +75,9 @@ async def update_status(channel, pug):
         player_list = ""
         for (i, player) in pug.remaining_players():
             if i > 0:
-                player_list += f"{i}. {player.name}\n"
+                player_list += f"`[{i}]` {player.name}\n"
             else:
-                player_list += f"~~{i}. {player.name}~~\n"
+                player_list += f"`[{-i}]` ~~{player.name}~~\n"
 
         new_status.add_field(
             name="Player List",

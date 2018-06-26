@@ -8,9 +8,10 @@ from pug import Pug
 from team import Team
 
 from utils import *
-import config
+from config import *
 
-TOKEN = os.getenv('TOKEN') if os.getenv('TOKEN') else config.TOKEN
+# Get the token from environment variables. Otherwise, get it from the config
+TOKEN = os.getenv('TOKEN') if os.getenv('TOKEN') else TOKEN
 
 # guild_list is of the form
 # {
@@ -42,41 +43,31 @@ async def on_message(message):
     ########################################
     if user_input["command"] == "help":
         help_embed = discord.Embed(
-            title="🤖 `pug-bot`",
+            title=TITLE,
+            description=DESCRIPTION,
             type="rich",
             color=discord.Color.blue()
         )
 
         help_embed.set_author(name=client.user.name)
 
-        commands_message = ""
-        commands_message += f"**{prefix}create [name] [size]** - Create a PUG\n"
-        commands_message += f"**{prefix}join [name]** - Join the listed PUG\n"
-        commands_message += f"**{prefix}leave** - Leave your PUG\n"
-        commands_message += f"**{prefix}cancel** - Delete the PUG you created\n"
-        commands_message += f"**{prefix}start** - Starts your PUG, moves teams to their channels, and closes the lobby\n"
-        commands_message += f"**{prefix}finish** - End a PUG\n"
-        commands_message += f"**{prefix}random [teams]** - Randomly create teams in your PUG, if possible\n"
-        commands_message += f"**{prefix}random captains [teams]** - Randomly assign captains in your PUG, if possible\n"
-        commands_message += f"**{prefix}team [team name]** - Create a team with the listed name\n"
-        commands_message += f"**{prefix}rename [team name]** - Rename your team if you're team captain\n"
-        commands_message += f"**{prefix}pick [number]** - Pick teammates\n"
-        commands_message += f"**{prefix}kick [number]** - Kick teammates from your team\n"
-        commands_message += f"**{prefix}channel** - Select your team's voice channel\n"
+        help_embed.add_field(
+            name=HOW_TO_USE,
+            value=USE_MESSAGE
+        )
 
         help_embed.add_field(
-            name="Available Commands",
-            value=commands_message,
+            name=COMMANDS,
+            value=COMMANDS_MESSAGE,
             inline=False
         )
 
         help_embed.set_footer(
-            text="https://github.com/stevenktruong/pug-bot",
-            icon_url = "https://camo.githubusercontent.com/7710b43d0476b6f6d4b4b2865e35c108f69991f3/68747470733a2f2f7777772e69636f6e66696e6465722e636f6d2f646174612f69636f6e732f6f637469636f6e732f313032342f6d61726b2d6769746875622d3235362e706e67"
+            text=FOOTER_TEXT,
+            icon_url=FOOTER_ICON
         )
 
         await message.author.send(embed=help_embed)
-
 
     # Add the guild to the guilds list if it's not in it already
     if not message.guild.name in guild_list.keys():
@@ -90,13 +81,13 @@ async def on_message(message):
     if user_input["command"] == "create":
         # Check if input is too long
         if len(message.content) > 100:
-            await message.channel.send("The input is too long. Try something shorter.")
+            await message.channel.send(INPUT_TOO_LONG)
             return
 
         # Check if a user already has a PUG or not
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
         if owned_pug:
-            await message.channel.send(f"You already have an active PUG named `{owned_pug.name}`.")
+            await message.channel.send(ALREADY_HAVE_PUG)
             return
 
         size_string = user_input["arguments"].split().pop()
@@ -105,11 +96,11 @@ async def on_message(message):
         try:
             pug_size = int(size_string)
         except:
-            await message.channel.send("I couldn't find a team size.")
+            await message.channel.send(NO_TEAM_SIZE)
             return
 
         if not 0 < pug_size <= 100:
-            await message.channel.send("A team size must lie between 1 and 100. Please try again.")
+            await message.channel.send(TEAM_SIZE_RANGE)
             return
 
         # Remove the numbers and the space right before the numbers
@@ -118,12 +109,12 @@ async def on_message(message):
         # Check if a PUG with the desired name exists
         existing_pug = find_in_list(lambda pug: pug.name == pug_name, pugs)
         if existing_pug:
-            await message.channel.send("A PUG with that name already exists. Please try a different name.")
+            await message.channel.send(PUG_ALREADY_EXISTS)
             return
 
         # Check if the input included a PUG name
         if not pug_name:
-            await message.channel.send("I couldn't find a PUG name. Please try again.")
+            await message.channel.send(NO_PUG_NAME)
             return
 
         # Create the pug
@@ -143,21 +134,20 @@ async def on_message(message):
         # Check if a user is already in a PUG
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
         if existing_pug:
-            await message.channel.send(f"You're already in the PUG `{existing_pug.name}`.")
+            await message.channel.send(ALREADY_IN_PUG)
             return
 
-        # Attempt to add the user to the PUG
-        for pug in pugs:
-            if pug.name == pug_name:
-                if pug.add_player(message.author):
-                    await update_status(message.channel, pug)
-                else:
-                    await message.channel.send(f"The PUG `{pug_name}` is full.")
+        current_pug = find_in_list(lambda pug: pug.name == pug_name, pugs)
+        if not current_pug:
+            await message.channel.send(PUG_DOESNT_EXIST)
+            return
 
-                return
+        # Attempt to add the user to the PUG and check for success
+        if not current_pug.add_player(message.author):
+            await message.channel.send(PUG_IS_FULL)
+            return
 
-        await message.channel.send(f"The PUG `{pug_name}` doesn't exist.")
-
+        await update_status(message.channel, current_pug)
 
 
     ########################################
@@ -166,150 +156,220 @@ async def on_message(message):
     if user_input["command"] == "leave":
         # Check if a user is in a PUG
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
-        if existing_pug:
-            existing_pug.remove_player(message.author)
-            await update_status(message.channel, existing_pug)
+        if not existing_pug:
+            await message.channel.send(NOT_IN_PUG)
             return
 
-        await message.channel.send("You're not currently in any PUG.")
+        # Leave the pug
+        existing_pug.remove_player(message.author)
+        await update_status(message.channel, existing_pug)
 
 
     ########################################
-    #### Deleting a pug
+    #### Cancelling a pug
     ########################################
     if user_input["command"] == "cancel":
+        # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
-        if owned_pug:
-            await message.channel.send(f"Successfully deleted the PUG `{owned_pug.name}`.")
+        if not owned_pug:
+            await message.channel.send(HAVE_NO_PUG)
+            return
 
-            if owned_pug.status:
-                await owned_pug.status.delete()
+        await message.channel.send(DELETED_PUG)
 
-            # Remove all references to the PUG
-            pugs.remove(owned_pug)
-            # del owned_pug
-        else:
-            await message.channel.send("You don't have any PUGs.")
+        if owned_pug.status:
+            await owned_pug.status.delete()
+
+        # Remove reference to the pug
+        pugs.remove(owned_pug)
 
 
     #########################################
     #### Starting a pug
     ########################################
     if user_input["command"] == "start":
+        # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
-        if owned_pug:
-            # If every team has chosen a channel
-            if all(team.channel for team in owned_pug.teams):
-                # Move the team members to their channel
-                for team in owned_pug.teams:
-                    for member in team.members:
-                        await member.move_to(team.channel)
+        if not owned_pug:
+            await message.channel.send(HAVE_NO_PUG)
+            return
 
-                await message.channel.send(f"Successfully started the PUG `{owned_pug.name}`.")
-                owned_pug.active = 1
+        if not owned_pug.teams:
+            await message.channel.send(PUG_HAS_NO_TEAMS)
+            return
 
-                await update_status(message.channel, owned_pug)
+        if not all(team.channel for team in owned_pug.teams):
+            await message.channel.send(CHANNELS_NOT_PICKED)
+            return
 
-            else:
-                await message.channel.send("Not all teams have chosen their channel yet.")
-        else:
-            await message.channel.send("You don't have any PUGs.")
+        # Move the team members to their channel
+        for team in owned_pug.teams:
+            for member in team.members:
+                await member.move_to(team.channel)
+
+        owned_pug.active = 1
+        await update_status(message.channel, owned_pug)
 
 
     ########################################
     #### Finishing a pug
     ########################################
     if user_input["command"] == "finish":
+        # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
-        if owned_pug:
-            await message.channel.send(f"Successfully stopped the PUG `{owned_pug.name}`.")
-            owned_pug.active = 2
+        if not owned_pug:
+            await message.channel.send(HAVE_NO_PUG)
+            return
 
-            await update_status(message.channel, owned_pug)
+        # Pick a channel to move players into
+        channels = [channel for channel in message.guild.voice_channels]
 
-            # Delete all references to the PUG -- it's done
-            pugs.remove(owned_pug)
-            # del owned_pug
+        channel_message = "Pick a channel to move all players into: (type anything else to not move players)\n"
+        for (i, channel) in enumerate(channels):
+            channel_message += f"`[{i+1}]` {channel}\n"
+        channel_list = await message.channel.send(channel_message)
+
+        # Wait for input
+        result = await client.wait_for("message", check=lambda m: m.author == message.author)
+        try:
+            index = int(result.content)-1
+        except:
+            await message.channel.send(DONT_MOVE_PLAYERS)
+            return
         else:
-            await message.channel.send("You don't have any PUGs.")
+            for player in owned_pug.players:
+                await player.move_to(channels[index])
+
+        # Close the pug
+        owned_pug.active = 2
+        await update_status(message.channel, owned_pug)
+
+        # Delete the list of channels
+        channel_list.delete()
+
+        # Remove the reference to the pug
+        pugs.remove(owned_pug)
+
+
+    ########################################
+    #### Resetting a pug
+    ########################################
+    if user_input["command"] == "reset":
+        # Check if the user owns a pug
+        owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
+        if not owned_pug:
+            await message.channel.send(HAVE_NO_PUG)
+            return
+
+        # Erase teams
+        owned_pug.teams = []
+        await update_status(message.channel, owned_pug)
+
+
+    ########################################
+    #### Refreshing the message
+    ########################################
+    if user_input["command"] == "refresh":
+        # Check if the user is in a pug
+        existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
+        if not existing_pug:
+            await message.channel.send(HAVE_NO_PUG)
+            return
+
+        # Refresh the message
+        await update_status(message.channel, existing_pug)
 
 
     ########################################
     #### Randomize teams
     ########################################
     if user_input["command"] == "random":
+        # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
-        if owned_pug:
-            arguments = user_input["arguments"]
-            try:
-                num_teams = int(arguments[-1])
-            except:
-                await message.channel.send("That wasn't a valid number. Please try again.")
-                return
+        if not owned_pug:
+            await message.channel.send(HAVE_NO_PUG)
+            return
 
-            if num_teams > len(owned_pug.players):
-                await message.channel.send("There aren't enough people for that many teams. Please try again.")
-                return
+        arguments = user_input["arguments"].split()
 
-            if num_teams <= 0:
-                await message.channel.send("The number of teams must be positive. Please try again.")
-                return
+        # Attempt to cast the input as an int
+        try:
+            num_teams = int(arguments[-1])
+        except:
+            await message.channel.send(INVALID_NUMBER)
+            return
 
+        # If there would be more teams than players
+        if num_teams > len(owned_pug.players):
+            await message.channel.send(NOT_ENOUGH_PLAYERS)
+            return
+
+        if num_teams <= 0:
+            await message.channel.send(NON_NEGATIVE_NUMBER)
+            return
+
+        if len(arguments) == 1:
             # Clear teams
             owned_pug.teams = []
 
-            if len(arguments) == 1:
-                # Randomize the team, including captains
-                players_copy = owned_pug.players.copy()
-                shuffle(players_copy)
-                even_number = len(players_copy) - len(players_copy)%num_teams
-                remainder = len(players_copy)%num_teams
+            # Randomize the team, including captains
+            players_copy = owned_pug.players.copy()
+            shuffle(players_copy)
+            even_number = len(players_copy) - len(players_copy)%num_teams
+            remainder = len(players_copy)%num_teams
 
-                team_sizes = [int(even_number/num_teams)] * num_teams
+            team_sizes = [int(even_number/num_teams)] * num_teams
 
-                # Randomly pick the team to receive the odd people out
-                for _ in range(remainder):
-                    team_sizes[randint(0, num_teams-1)] += 1
+            # Randomly pick the team to receive the odd people out
+            for _ in range(remainder):
+                team_sizes[randint(0, num_teams-1)] += 1
 
-                # Assign the teams
-                for (i, team_size) in enumerate(team_sizes):
-                    owned_pug.teams.append(Team(name=f"{i+1}", members=players_copy[:team_size]))
-                    players_copy = players_copy[team_size:]
-            elif len(arguments) == 2 and arguments[0] == "captains":
-                # Randomly pick captains
-                players_copy = owned_pug.players.copy()
-                shuffle(players_copy)
-                for i in range(num_teams):
-                    owned_pug.add_team(players_copy[i])
+            # Assign the teams
+            for (i, team_size) in enumerate(team_sizes):
+                owned_pug.teams.append(Team(name=f"{i+1}", members=players_copy[:team_size]))
+                players_copy = players_copy[team_size:]
 
             await update_status(message.channel, owned_pug)
-        else:
-            await message.channel.send("You don't have any PUGs.")
+        elif len(arguments) == 2 and arguments[0] == "captains":
+            # Clear teams
+            owned_pug.teams = []
+
+            # Randomly pick captains
+            players_copy = owned_pug.players.copy()
+            shuffle(players_copy)
+            for i in range(num_teams):
+                owned_pug.add_team(players_copy[i])
+
+            await update_status(message.channel, owned_pug)
     
 
     ########################################
     #### Creating a team
     ########################################
     if user_input["command"] == "team":
+        # Check if input is too long
         if len(message.content) > 50:
-            await message.channel.send("The input is too long. Try something shorter.")
+            await message.channel.send(INPUT_TOO_LONG)
             return
 
         team_name = user_input["arguments"]
         
+        # Check for errors
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
         if not existing_pug:
-            await message.channel.send("You're not in any active PUGs.")
-            return
-        if team_name in map(lambda team: team.name, existing_pug.teams):
-            await message.channel.send("A team with that name already exists.")
-            return
-        if existing_pug.find_team(message.author):
-            await message.channel.send("You're already in a team.")
+            await message.channel.send(NOT_IN_PUG)
             return
 
+        if team_name in map(lambda team: team.name, existing_pug.teams):
+            await message.channel.send(TEAM_ALREADY_EXISTS)
+            return
+
+        if existing_pug.find_team(message.author):
+            await message.channel.send(ALREADY_IN_TEAM)
+            return
+
+        # Create the team
         existing_pug.add_team(message.author, team_name)
-        # await message.channel.send(f"Successfully created the team `{team_name}`.")
         await update_status(message.channel, existing_pug)
 
 
@@ -317,126 +377,133 @@ async def on_message(message):
     #### Renaming a team
     ########################################
     if user_input["command"] == "rename":
+        # Check if a user is in a pug
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
-        if existing_pug:
-            if existing_pug.is_captain(message.author):
-                # If the user is a captain
-                new_name = user_input["arguments"]
+        if not existing_pug:
+            await message.channel.send(NOT_IN_PUG)
+            return
 
-                # Check if the name is used somewhere else in the pug
-                if not all(not team.name == new_name for team in existing_pug.teams):
-                    await message.channel.send("A team with that name already exists.")
-                    return
+        # Check if user is a captain
+        if not existing_pug.is_captain(message.author):
+            await message.channel.send(NOT_A_CAPTAIN)
+            return
 
-                # If everything goes well
-                existing_pug.find_team(message.author).name = new_name
-                
-                await update_status(message.channel, existing_pug)
-            else:
-                # If the user is not a captain
-                await message.channel.send("Only captains can change a team name.")
-        else:
-            await message.channel.send("You're not currently in a PUG.")
+        # If the user is a captain
+        new_name = user_input["arguments"]
+
+        # Check if the name is used somewhere else in the pug
+        if not all(not team.name == new_name for team in existing_pug.teams):
+            await message.channel.send(TEAM_ALREADY_EXISTS)
+            return
+
+        # Rename the team
+        existing_pug.find_team(message.author).name = new_name
+        await update_status(message.channel, existing_pug)
 
 
     ########################################
     #### Picking a team member
     ########################################
     if user_input["command"] == "pick":
+        # Check if a user is in a pug
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
-        if existing_pug:
-            if existing_pug.is_captain(message.author):
-                # If the user is a captain
-                try:
-                    player_num = int(user_input["arguments"])
-                except:
-                    await message.channel.send("That wasn't a valid number. Try again.")
-                    return
+        if not existing_pug:
+            await message.channel.send(NOT_IN_PUG)
+            return
 
-                # If the number is not in the correct range or if the chosen player is on a team already
-                if not 1 <= player_num <= len(existing_pug.players) or existing_pug.find_team(existing_pug.players[player_num-1]):
-                    await message.channel.send("That wasn't a valid pick. Try again.")
-                    return
+        # Check if a user is a captain
+        if not existing_pug.is_captain(message.author):
+            await message.channel.send(NOT_A_CAPTAIN)
+            return
 
-                # If everything goes well
-                existing_pug.add_to_team(message.author, player_num)
-                await message.channel.send(f"Added {existing_pug.players[player_num-1]} to your team.")
-                
-                await update_status(message.channel, existing_pug)
-            else:
-                # If the user is not a captain
-                await message.channel.send("Only captains can pick players.")
-        else:
-            await message.channel.send("You're not currently in a PUG.")
+        try:
+            player_num = int(user_input["arguments"])
+        except:
+            await message.channel.send(INVALID_NUMBER)
+            return
+
+        # If the number is not in the correct range or if the chosen player is on a team already
+        if not 1 <= player_num <= len(existing_pug.players) or existing_pug.find_team(existing_pug.players[player_num-1]):
+            await message.channel.send(INVALID_PICK)
+            return
+
+        # Add player to team
+        existing_pug.add_to_team(message.author, player_num)
+        await update_status(message.channel, existing_pug)
 
 
     ########################################
     #### Kicking a team member
     ########################################
     if user_input["command"] == "kick":
+        # Check if a user is in a pug
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
-        if existing_pug:
-            if existing_pug.is_captain(message.author):
-                # If the user is a captain
-                try:
-                    player_num = int(user_input["arguments"])
-                except:
-                    await message.channel.send("That wasn't a valid number. Try again.")
-                    return
+        if not existing_pug:
+            await message.channel.send(NOT_IN_PUG)
+            return
 
-                # If everything goes well
-                current_team = existing_pug.find_team(message.author)
-                if not 1 <= player_num <= len(current_team.members):
-                    await message.channel.send("That wasn't a valid number. Try again.")
-                    return
+        # Check if a user is a captain
+        if not existing_pug.is_captain(message.author):
+            await message.channel.send(NOT_A_CAPTAIN)
+            return
 
-                # await message.channel.send(f"Removed {current_team.members[player_num-1]} from your team.")
-                existing_pug.remove_from_team(message.author, player_num)
-                
-                await update_status(message.channel, existing_pug)
-            else:
-                # If the user is not a captain
-                await message.channel.send("Only captains can pick players.")
-        else:
-            await message.channel.send("You're not currently in a PUG.")
+        # Attempt to cast the input as an int
+        try:
+            player_num = int(user_input["arguments"])
+        except:
+            await message.channel.send(INVALID_NUMBER)
+            return
+
+        # Kick the team member
+        current_team = existing_pug.find_team(message.author)
+        if not 1 <= player_num <= len(current_team.members):
+            await message.channel.send(INVALID_NUMBER)
+            return
+
+        existing_pug.remove_from_team(message.author, player_num)
+        await update_status(message.channel, existing_pug)
 
 
     ########################################
-    #### Pick a channel
+    #### Picking a channel
     ########################################
     if user_input["command"] == "channel":
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
-        if existing_pug:
-            if existing_pug.is_captain(message.author):
-                # If the user is a captain
-                # Find all voice channels and ist them
-                channels = [channel for channel in message.guild.voice_channels]
+        if not existing_pug:
+            await message.channel.send(NOT_IN_PUG)
+            return
 
-                channel_message = "Pick a channel:\n"
-                for (i, channel) in enumerate(channels):
-                    channel_message += f"{i+1}. {channel}\n"
-                await message.channel.send(channel_message)
+        if not existing_pug.is_captain(message.author):
+            await message.channel.send(NOT_A_CAPTAIN)
+            return
 
-                # Wait for input
-                result = await client.wait_for("message", check=lambda m: m.author == message.author)
-                try:
-                    index = int(result.content)-1
-                except:
-                    await message.channel.send("That wasn't a valid number. Try again.")
-                    return
-                
-                # Check if the channel has been taken
-                if all(not team.channel == channels[index] for team in existing_pug.teams):
-                    existing_pug.find_team(message.author).channel = channels[index]
-                    await message.channel.send(f"You have successfully set your team's channel to {channels[index].name}.")
-                    
-                    await update_status(message.channel, existing_pug)
-                else:
-                    await message.channel.send("That channel has been taken already. Try again.")
-            else:
-                # If the user is not a captain
-                await message.channel.send("Only captains can pick a channel.")
-        else:
-            await message.channel.send("You're not currently in a PUG.")
+        # Find all voice channels and list them
+        channels = [channel for channel in message.guild.voice_channels]
+
+        channel_message = "Pick a channel:\n"
+        for (i, channel) in enumerate(channels):
+            channel_message += f"`[{i+1}]` {channel}\n"
+        channel_list = await message.channel.send(channel_message)
+
+        # Wait for input
+        result = await client.wait_for("message", check=lambda m: m.author == message.author)
+        try:
+            index = int(result.content)-1
+        except:
+            await message.channel.send(INVALID_NUMBER)
+            return
+
+        # Delete the list of channels
+        channel_list.delete()
+        
+        # Check if the channel has been taken
+        # If at least one team channel has picked that channel
+        if not all(not team.channel == channels[index] for team in existing_pug.teams):
+            await message.channel.send(CHANNEL_ALREADY_PICKED)
+            return
+
+        # Pick the channel
+        existing_pug.find_team(message.author).channel = channels[index]
+        await update_status(message.channel, existing_pug)
 
 client.run(TOKEN)
