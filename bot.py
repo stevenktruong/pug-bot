@@ -210,15 +210,22 @@ async def on_message(message):
         owned_pug.active = 1
         await update_status(message.channel, owned_pug)
 
-
+    #########################################
+    #### Stopping a pug
     ########################################
-    #### Finishing a pug
-    ########################################
-    if user_input["command"] == "finish":
+    if user_input["command"] == "stop":
         # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
         if not owned_pug:
             await message.channel.send(HAVE_NO_PUG)
+            return
+
+        if not owned_pug.teams:
+            await message.channel.send(PUG_HAS_NO_TEAMS)
+            return
+
+        if not all(team.channel for team in owned_pug.teams):
+            await message.channel.send(CHANNELS_NOT_PICKED)
             return
 
         # Pick a channel to move players into
@@ -239,6 +246,21 @@ async def on_message(message):
         else:
             for player in owned_pug.players:
                 await player.move_to(channels[index])
+
+        # Stop pug
+        owned_pug.active = 0
+        await update_status(message.channel, owned_pug)
+
+
+    ########################################
+    #### Close a pug
+    ########################################
+    if user_input["command"] == "close":
+        # Check if the user owns a pug
+        owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
+        if not owned_pug:
+            await message.channel.send(HAVE_NO_PUG)
+            return
 
         # Close the pug
         owned_pug.active = 2
