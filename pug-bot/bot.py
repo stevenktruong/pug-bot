@@ -23,10 +23,9 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    print("Logged in as")
-    print(client.user.name)
-    print(client.user.id)
-    print("------")
+    print("Successfully logged in.")
+    print(f"Username: {client.user.name}")
+    print(f"ID: {client.user.id}")
 
 @client.event
 async def on_message(message):
@@ -231,7 +230,7 @@ async def on_message(message):
         # Pick a channel to move players into
         channels = [channel for channel in message.guild.voice_channels]
 
-        channel_message = "Pick a channel to move all players into: (type anything else to not move players)\n"
+        channel_message = f"{PICK_A_CHANNEL_END}\n\u200b\n" # '\u200b' gives an empty line
         for (i, channel) in enumerate(channels):
             channel_message += f"`[{i+1}]` {channel}\n"
         channel_list = await message.channel.send(channel_message)
@@ -526,7 +525,7 @@ async def on_message(message):
         # Find all voice channels and list them
         channels = [channel for channel in message.guild.voice_channels]
 
-        channel_message = "Pick a channel:\n"
+        channel_message = f"{PICK_A_CHANNEL_START}\n\u200b\n"
         for (i, channel) in enumerate(channels):
             channel_message += f"`[{i+1}]` {channel}\n"
         channel_list = await message.channel.send(channel_message)

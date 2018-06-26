@@ -40,6 +40,7 @@ async def update_status(channel, pug):
 
     new_status = discord.Embed(
         title=pug.name,
+        description=f"Type `{prefix}join {pug.name}` to join this lobby.\n\u200b",
         type="rich",
         color=color
     )
@@ -53,7 +54,7 @@ async def update_status(channel, pug):
 
     new_status.add_field(
         name="Player Count",
-        value=f"Current number of players: {len(pug.players)}/{pug.max_size}",
+        value=f"Current number of players: {len(pug.players)}/{pug.max_size}\n\u200b",
         inline=False
     )
 
@@ -63,6 +64,7 @@ async def update_status(channel, pug):
                 member_list = ""
                 for (i, player) in enumerate(team.members):
                     member_list += f"`[{i+1}]` {player.name}\n"
+                member_list += "\u200b"
 
                 channel_message = f" (Channel: {team.channel})" if team.channel else ""
                 new_status.add_field(
@@ -78,6 +80,7 @@ async def update_status(channel, pug):
                 player_list += f"`[{i}]` {player.name}\n"
             else:
                 player_list += f"`[{-i}]` ~~{player.name}~~\n"
+        player_list += "\u200b"
 
         new_status.add_field(
             name="Player List",

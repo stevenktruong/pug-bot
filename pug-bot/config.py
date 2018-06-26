@@ -18,6 +18,7 @@ USE_MESSAGE += "3. Create teams and have captains pick teammates.\n"
 USE_MESSAGE += "4. Have captains pick voice channels, and then start!\n"
 USE_MESSAGE += "5. After you're done playing, you can stop the PUG.\n"
 USE_MESSAGE += "6. When you're done with the lobby, you can close it.\n"
+USE_MESSAGE += "\u200b"
 
 COMMANDS_MESSAGE = ""
 COMMANDS_MESSAGE += f"**{prefix}create [name] [size]** - Create a PUG\n"
@@ -37,6 +38,11 @@ COMMANDS_MESSAGE += f"**{prefix}rename [team name]** - Rename your team if you'r
 COMMANDS_MESSAGE += f"**{prefix}pick [number]** - Pick teammates\n"
 COMMANDS_MESSAGE += f"**{prefix}kick [number]** - Kick teammates from your team\n"
 COMMANDS_MESSAGE += f"**{prefix}channel** - Select your team's voice channel\n"
+COMMANDS_MESSAGE += "\u200b"
+
+# Commands
+PICK_A_CHANNEL_START = "Pick a channel:"
+PICK_A_CHANNEL_END = "Pick a channel to move all players into: (type anything else to not move players)"
 
 # Input errors
 INPUT_TOO_LONG = "The input is too long. Try something shorter."
