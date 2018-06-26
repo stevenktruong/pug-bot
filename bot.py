@@ -162,7 +162,9 @@ async def on_message(message):
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
         if owned_pug:
             await message.channel.send(f"Successfully deleted the PUG `{owned_pug.name}`.")
-            await owned_pug.status.delete()
+
+            if owned_pug.status:
+                await owned_pug.status.delete()
 
             # Remove all references to the PUG
             pugs.remove(owned_pug)
