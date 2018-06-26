@@ -1,5 +1,5 @@
 # Bot Configuration
-TOKEN = "NDYwNTUwOTc1NzExODcwOTk2.DhNRSg.MU-GAGPETMgVXNQf6_Bwdb7GLoE"
+TOKEN = "YOUR_TOKEN_HERE"
 prefix = ".."
 
 # Messages
