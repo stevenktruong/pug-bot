@@ -37,9 +37,9 @@ async def on_message(message):
     if message.content.startswith(f"{prefix}"):
         user_input = parse_command(message.content)
 
-    ########################################
-    #### Help function
-    ########################################
+    ################################################################################
+    ######## Help function
+    ################################################################################
     if user_input["command"] == "help":
         help_embed = discord.Embed(
             title=TITLE,
@@ -74,9 +74,9 @@ async def on_message(message):
 
     pugs = guild_list[message.guild.name]
 
-    ########################################
-    #### Creating a pug
-    ########################################
+    ################################################################################
+    ######## Creating a pug
+    ################################################################################
     if user_input["command"] == "create":
         # Check if input is too long
         if len(message.content) > 100:
@@ -124,9 +124,9 @@ async def on_message(message):
         await update_status(message.channel, new_pug)
 
 
-    ########################################
-    #### Joining a pug
-    ########################################
+    ################################################################################
+    ######## Joining a pug
+    ################################################################################
     if user_input["command"] == "join":
         pug_name = user_input["arguments"]
         
@@ -149,9 +149,9 @@ async def on_message(message):
         await update_status(message.channel, current_pug)
 
 
-    ########################################
-    #### Leaving a pug
-    ########################################
+    ################################################################################
+    ######## Leaving a pug
+    ################################################################################
     if user_input["command"] == "leave":
         # Check if a user is in a PUG
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
@@ -164,9 +164,9 @@ async def on_message(message):
         await update_status(message.channel, existing_pug)
 
 
-    ########################################
-    #### Cancelling a pug
-    ########################################
+    ################################################################################
+    ######## Cancelling a pug
+    ################################################################################
     if user_input["command"] == "cancel":
         # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
@@ -183,9 +183,9 @@ async def on_message(message):
         pugs.remove(owned_pug)
 
 
-    #########################################
-    #### Starting a pug
-    ########################################
+    #################################################################################
+    ######## Starting a pug
+    ################################################################################
     if user_input["command"] == "start":
         # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
@@ -209,9 +209,9 @@ async def on_message(message):
         owned_pug.active = 1
         await update_status(message.channel, owned_pug)
 
-    #########################################
-    #### Stopping a pug
-    ########################################
+    #################################################################################
+    ######## Stopping a pug
+    ################################################################################
     if user_input["command"] == "stop":
         # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
@@ -251,9 +251,9 @@ async def on_message(message):
         await update_status(message.channel, owned_pug)
 
 
-    ########################################
-    #### Close a pug
-    ########################################
+    ################################################################################
+    ######## Close a pug
+    ################################################################################
     if user_input["command"] == "close":
         # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
@@ -269,9 +269,9 @@ async def on_message(message):
         pugs.remove(owned_pug)
 
 
-    ########################################
-    #### Resetting a pug
-    ########################################
+    ################################################################################
+    ######## Resetting a pug
+    ################################################################################
     if user_input["command"] == "reset":
         # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
@@ -284,9 +284,9 @@ async def on_message(message):
         await update_status(message.channel, owned_pug)
 
 
-    ########################################
-    #### Refreshing the message
-    ########################################
+    ################################################################################
+    ######## Refreshing the message
+    ################################################################################
     if user_input["command"] == "refresh":
         # Check if the user is in a pug
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
@@ -298,10 +298,10 @@ async def on_message(message):
         await update_status(message.channel, existing_pug)
 
 
-    ########################################
-    #### Remove a player
-    ########################################
-    if user_input["command"] == "remove":
+    ################################################################################
+    ######## Remove a player
+    ################################################################################
+    if user_input["command"] in ["remove", "👢"]:
         # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
         if not owned_pug:
@@ -325,9 +325,9 @@ async def on_message(message):
         await update_status(message.channel, owned_pug)
 
 
-    ########################################
-    #### Randomize teams
-    ########################################
+    ################################################################################
+    ######## Randomize teams
+    ################################################################################
     if user_input["command"] == "random":
         # Check if the user owns a pug
         owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
@@ -388,9 +388,9 @@ async def on_message(message):
             await update_status(message.channel, owned_pug)
     
 
-    ########################################
-    #### Creating a team
-    ########################################
+    ################################################################################
+    ######## Creating a team
+    ################################################################################
     if user_input["command"] == "team":
         # Check if input is too long
         if len(message.content) > 50:
@@ -418,9 +418,9 @@ async def on_message(message):
         await update_status(message.channel, existing_pug)
 
 
-    ########################################
-    #### Renaming a team
-    ########################################
+    ################################################################################
+    ######## Renaming a team
+    ################################################################################
     if user_input["command"] == "rename":
         # Check if a user is in a pug
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
@@ -446,9 +446,9 @@ async def on_message(message):
         await update_status(message.channel, existing_pug)
 
 
-    ########################################
-    #### Picking a team member
-    ########################################
+    ################################################################################
+    ######## Picking a team member
+    ################################################################################
     if user_input["command"] == "pick":
         # Check if a user is in a pug
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
@@ -477,9 +477,9 @@ async def on_message(message):
         await update_status(message.channel, existing_pug)
 
 
-    ########################################
-    #### Kicking a team member
-    ########################################
+    ################################################################################
+    ######## Kicking a team member
+    ################################################################################
     if user_input["command"] == "kick":
         # Check if a user is in a pug
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
@@ -509,9 +509,9 @@ async def on_message(message):
         await update_status(message.channel, existing_pug)
 
 
-    ########################################
-    #### Picking a channel
-    ########################################
+    ################################################################################
+    ######## Picking a channel
+    ################################################################################
     if user_input["command"] == "channel":
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
         if not existing_pug:
