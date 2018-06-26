@@ -30,7 +30,7 @@ async def update_status(channel, pug):
     """
     if pug.active == 0:   # PUG hasn't started
         color = discord.Color.red()
-        footer_text = "This PUG has not started yet."
+        footer_text = "This PUG is stopped."
     elif pug.active == 1: # PUG has started
         color = discord.Color.green()
         footer_text = "This PUG has started."
