@@ -41,22 +41,41 @@ async def on_message(message):
     #### Help function
     ########################################
     if user_input["command"] == "help":
-        help_message = "```"
-        help_message += f"{prefix}create [pug name] [size] - Create a PUG with the given name and size.\n"
-        help_message += f"{prefix}join [pug name] - Join a PUG with the given name.\n"
-        help_message += f"{prefix}leave - Leave whatever PUG you're in.\n"
-        help_message += f"{prefix}cancel - If you've created a PUG, this deletes it.\n"
-        help_message += f"{prefix}start - If you've created a PUG, this starts it. This moves all players to the chosen channels and closes the create lobby.\n"
-        help_message += f"{prefix}finish - If you've started a PUG, you can run this command to end it. Afterwards, you will no longer have access to it.\n"
-        help_message += f"{prefix}random [teams] - If you own a PUG, you can randomly create as many teams as you want, if possible.\n"
-        help_message += f"{prefix}random captains [teams] - If you own a PUG, you can randomly assign as many captains as you want, if possible.\n"
-        help_message += f"{prefix}team [team name] - Once you're in a PUG, you can create your own team with the given name.\n"
-        help_message += f"{prefix}rename [team name] - If you're a team captain, you can rename your team with this command.\n"
-        help_message += f"{prefix}pick [number] - If you're team captain, you can pick your teammates with this.\n"
-        help_message += f"{prefix}kick [number] - If you're team captain, you can kick your teammates with this.\n"
-        help_message += f"{prefix}channel - If you're team captain, you can select a voice channel for your team. Enter the number of the voice channel you want.\n"
-        help_message += "```"
-        await message.author.send(help_message)
+        help_embed = discord.Embed(
+            title="🤖 `pug-bot`",
+            type="rich",
+            color=discord.Color.blue()
+        )
+
+        help_embed.set_author(name=client.user.name)
+
+        commands_message = ""
+        commands_message += f"**{prefix}create [name] [size]** - Create a PUG\n"
+        commands_message += f"**{prefix}join [name]** - Join the listed PUG\n"
+        commands_message += f"**{prefix}leave** - Leave your PUG\n"
+        commands_message += f"**{prefix}cancel** - Delete the PUG you created\n"
+        commands_message += f"**{prefix}start** - Starts your PUG, moves teams to their channels, and closes the lobby\n"
+        commands_message += f"**{prefix}finish** - End a PUG\n"
+        commands_message += f"**{prefix}random [teams]** - Randomly create teams in your PUG, if possible\n"
+        commands_message += f"**{prefix}random captains [teams]** - Randomly assign captains in your PUG, if possible\n"
+        commands_message += f"**{prefix}team [team name]** - Create a team with the listed name\n"
+        commands_message += f"**{prefix}rename [team name]** - Rename your team if you're team captain\n"
+        commands_message += f"**{prefix}pick [number]** - Pick teammates\n"
+        commands_message += f"**{prefix}kick [number]** - Kick teammates from your team\n"
+        commands_message += f"**{prefix}channel** - Select your team's voice channel\n"
+
+        help_embed.add_field(
+            name="Available Commands",
+            value=commands_message,
+            inline=False
+        )
+
+        help_embed.set_footer(
+            text="https://github.com/stevenktruong/pug-bot",
+            icon_url = "https://camo.githubusercontent.com/7710b43d0476b6f6d4b4b2865e35c108f69991f3/68747470733a2f2f7777772e69636f6e66696e6465722e636f6d2f646174612f69636f6e732f6f637469636f6e732f313032342f6d61726b2d6769746875622d3235362e706e67"
+        )
+
+        await message.author.send(embed=help_embed)
 
 
     # Add the guild to the guilds list if it's not in it already
@@ -149,7 +168,7 @@ async def on_message(message):
         existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
         if existing_pug:
             existing_pug.remove_player(message.author)
-            await update_status(message.chanel, existing_pug)
+            await update_status(message.channel, existing_pug)
             return
 
         await message.channel.send("You're not currently in any PUG.")

@@ -68,7 +68,7 @@ async def update_status(channel, pug):
                 new_status.add_field(
                     name=f"Team {team.name} — Captain: {team.members[0]}{channel_message}",
                     value=member_list,
-                    inline=False
+                    inline=True
                 )
 
     if pug.players:
