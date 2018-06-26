@@ -266,9 +266,6 @@ async def on_message(message):
         owned_pug.active = 2
         await update_status(message.channel, owned_pug)
 
-        # Delete the list of channels
-        channel_list.delete()
-
         # Remove the reference to the pug
         pugs.remove(owned_pug)
 
@@ -300,6 +297,33 @@ async def on_message(message):
 
         # Refresh the message
         await update_status(message.channel, existing_pug)
+
+
+    ########################################
+    #### Remove a player
+    ########################################
+    if user_input["command"] == "remove":
+        # Check if the user owns a pug
+        owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
+        if not owned_pug:
+            await message.channel.send(HAVE_NO_PUG)
+            return
+
+        # Attempt to cast the argument as an int
+        try:
+            player_num = int(user_input["arguments"])
+        except:
+            await message.channel.send(INVALID_NUMBER)
+            return
+
+        # If the number is not in the correct range
+        if not 1 <= player_num <= len(owned_pug.players):
+            await message.channel.send(INVALID_NUMBER)
+            return
+
+        # Remove the player from the PUG
+        owned_pug.remove_player(owned_pug.players[player_num-1])
+        await update_status(message.channel, owned_pug)
 
 
     ########################################

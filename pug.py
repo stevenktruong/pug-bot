@@ -1,4 +1,5 @@
 from team import Team
+from utils import find_in_list
 
 class Pug:
 
@@ -80,32 +81,22 @@ class Pug:
         self.players.remove(player)
 
         # Remove the player from any lists
-        current_team = list(filter(lambda team: player in team.members, self.teams))
+        current_team = find_in_list(lambda team: player in team.members, self.teams)
         if current_team:
-            current_team[0].remove_member(player)
+            current_team.remove_member(player)
 
             # If the team is empty after removing a player, delete the team
-            if not current_team[0].members:
-                self.teams.remove(current_team[0])
-                del current_team[0]
-
-    # def add_to_team(self, player, team):
-    #     if not player in self.players:
-    #         raise ValueError("User is not in the PUG.")
-    #     if self.find_team(player):
-    #         raise ValueError("User is already in a team.")
-    #     current_team = list(filter(lambda _team: team == _team.name, self.teams))
-    #     if not current_team:
-    #         raise ValueError("That team does not exist.")
-    #     current_team[0].add_member(player)
+            if not current_team.members:
+                self.teams.remove(current_team)
+                del current_team
         
     def is_captain(self, player):
         return player in map(lambda team: team.members[0], self.teams)
             
     def find_team(self, player):
-        current_team = list(filter(lambda team: player in team.members, self.teams))
+        current_team = find_in_list(lambda team: player in team.members, self.teams)
         if current_team:
-            return current_team[0]
+            return current_team
         else:
             return None
 
