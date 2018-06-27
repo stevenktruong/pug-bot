@@ -52,27 +52,30 @@ async def update_status(channel, pug):
         icon_url=pug.creator.avatar_url
     )
 
+    # Player count
     new_status.add_field(
         name="Player Count",
         value=f"Current number of players: {len(pug.players)}/{pug.max_size}\n\u200b",
         inline=False
     )
 
+    # PUG teams
     if pug.teams:
         for team in pug.teams:
             if team.members:
-                member_list = ""
-                for (i, player) in enumerate(team.members):
+                member_list = "Channel: " + f"{team.channel}" if team.channel else "Not chosen" + "\n\u200b"
+                member_list += f"`[1]` {team.members[0]} **(Captain)**\n"
+                for (i, player) in enumerate(team.members[1:]):
                     member_list += f"`[{i+1}]` {player.name}\n"
                 member_list += "\u200b"
 
-                channel_message = f" (Channel: {team.channel})" if team.channel else ""
                 new_status.add_field(
-                    name=f"Team {team.name} — Captain: {team.members[0]}{channel_message}",
+                    name=f"Team {team.name}",
                     value=member_list,
-                    inline=True
+                    inline=False
                 )
 
+    # PUG players
     if pug.players:
         player_list = ""
         for (i, player) in pug.remaining_players():
@@ -85,8 +88,24 @@ async def update_status(channel, pug):
         new_status.add_field(
             name="Player List",
             value=player_list,
-            inline=False
+            inline=True
         )
+
+    # PUG channels
+    channels = [channel for channel in channel.guild.voice_channels]
+
+    channel_list = ""
+    for (i, _channel) in enumerate(channels):
+        if _channel in [team.channel for team in pug.teams]:
+            channel_list += f"`[{i+1}]` ~~{_channel}~~\n"
+        else:
+            channel_list += f"`[{i+1}]` {_channel}\n"
+
+    new_status.add_field(
+        name="Channel List",
+        value=channel_list,
+        inline=True
+    )
 
     if pug.status:
         await pug.status.delete()

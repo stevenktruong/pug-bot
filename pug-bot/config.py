@@ -37,7 +37,7 @@ COMMANDS_MESSAGE += f"**{prefix}team [team name]** - Create a team with the list
 COMMANDS_MESSAGE += f"**{prefix}rename [team name]** - Rename your team if you're team captain\n"
 COMMANDS_MESSAGE += f"**{prefix}pick [number]** - Pick teammates\n"
 COMMANDS_MESSAGE += f"**{prefix}kick [number]** - Kick teammates from your team\n"
-COMMANDS_MESSAGE += f"**{prefix}channel** - Select your team's voice channel\n"
+COMMANDS_MESSAGE += f"**{prefix}channel [number]** - Select your team's voice channel\n"
 COMMANDS_MESSAGE += "\u200b"
 
 # Commands

@@ -522,27 +522,17 @@ async def on_message(message):
             await message.channel.send(NOT_A_CAPTAIN)
             return
 
-        # Find all voice channels and list them
-        channels = [channel for channel in message.guild.voice_channels]
-
-        channel_message = f"{PICK_A_CHANNEL_START}\n\u200b\n"
-        for (i, channel) in enumerate(channels):
-            channel_message += f"`[{i+1}]` {channel}\n"
-        channel_list = await message.channel.send(channel_message)
-
-        # Wait for input
-        result = await client.wait_for("message", check=lambda m: m.author == message.author)
+        # Attempt to cast the input as an int
         try:
-            index = int(result.content)-1
+            index = int(user_input["arguments"])-1
         except:
             await message.channel.send(INVALID_NUMBER)
             return
-
-        # Delete the list of channels
-        channel_list.delete()
         
         # Check if the channel has been taken
         # If at least one team channel has picked that channel
+        channels = [channel for channel in message.guild.voice_channels]
+
         if not all(not team.channel == channels[index] for team in existing_pug.teams):
             await message.channel.send(CHANNEL_ALREADY_PICKED)
             return
