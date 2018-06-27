@@ -95,7 +95,7 @@ async def on_message(message):
         try:
             pug_size = int(size_string)
         except:
-            await message.channel.send(NO_TEAM_SIZE)
+            await message.channel.send(NO_PUG_SIZE)
             return
 
         if not 0 < pug_size <= 100:

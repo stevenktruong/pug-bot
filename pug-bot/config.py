@@ -55,6 +55,7 @@ NON_NEGATIVE_NUMBER = "The number of teams must be positive. Please try again."
 # PUG errors
 ALREADY_HAVE_PUG = "You already have an active PUG."
 HAVE_NO_PUG = "You don't have any PUGs."
+NO_PUG_SIZE = "I couldn't find a PUG size."
 PUG_ALREADY_EXISTS = "A PUG with that name already exists. Please try a different name."
 ALREADY_IN_PUG = "You're already in a PUG."
 NOT_IN_PUG = "You're not currently in any PUG."
