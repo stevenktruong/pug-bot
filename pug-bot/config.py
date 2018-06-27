@@ -42,7 +42,7 @@ COMMANDS_MESSAGE += "\u200b"
 
 # Commands
 PICK_A_CHANNEL_START = "Pick a channel:"
-PICK_A_CHANNEL_END = "Pick a channel to move all players into: (type anything else to not move players)"
+PICK_A_CHANNEL_END = "Pick a channel to move all players into. (Type anything else to not move players)"
 
 # Input errors
 INPUT_TOO_LONG = "The input is too long. Try something shorter."
