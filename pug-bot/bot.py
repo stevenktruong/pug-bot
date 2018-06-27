@@ -524,10 +524,14 @@ async def on_message(message):
         except:
             await message.channel.send(INVALID_NUMBER)
             return
-        
+
         # Check if the channel has been taken
         # If at least one team channel has picked that channel
         channels = [channel for channel in message.guild.voice_channels]
+
+        if not 1 <= index <= len(channels):
+            await message.channel.send(INVALID_NUMBER)
+            return
 
         if not all(not team.channel == channels[index] for team in existing_pug.teams):
             await message.channel.send(CHANNEL_ALREADY_PICKED)
