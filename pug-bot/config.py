@@ -1,5 +1,4 @@
 # Bot Configuration
-TOKEN = "YOUR_TOKEN_HERE"
 prefix = ".."
 
 # Messages
@@ -41,13 +40,11 @@ COMMANDS_MESSAGE += f"**{prefix}channel [number]** - Select your team's voice ch
 COMMANDS_MESSAGE += "\u200b"
 
 # Commands
-PICK_A_CHANNEL_START = "Pick a channel:"
 PICK_A_CHANNEL_END = "Pick a channel to move all players into. (Type anything else to not move players)"
 
 # Input errors
 INPUT_TOO_LONG = "The input is too long. Try something shorter."
 NO_PUG_NAME = "I couldn't find a PUG name. Please try again."
-NO_TEAM_SIZE = "I couldn't find a team size."
 TEAM_SIZE_RANGE = "A team size must lie between 1 and 100. Please try again."
 INVALID_NUMBER = "That wasn't a valid number. Please try again."
 NON_NEGATIVE_NUMBER = "The number of teams must be positive. Please try again."

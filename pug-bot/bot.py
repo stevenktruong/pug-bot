@@ -9,33 +9,43 @@ from team import Team
 
 from utils import *
 from config import *
+from apitoken import TOKEN as TOKEN
 
 # Get the token from environment variables. Otherwise, get it from the config
 TOKEN = os.getenv('TOKEN') if os.getenv('TOKEN') else TOKEN
 
-# guild_list is of the form
+# guild_list stores all pug information and is of the form
 # {
 #     guild: set()
 # }
 guild_list = {}
 
+# Bot code
 client = discord.Client()
 
 @client.event
 async def on_ready():
-    print("Successfully logged in.")
+    print("Successfully logged in")
     print(f"Username: {client.user.name}")
     print(f"ID: {client.user.id}")
 
 @client.event
 async def on_message(message):
-    # We do not want the bot to reply to itself
+    # Prevent the bot from reading its own messages
     if message.author == client.user:
         return
 
     user_input = {"command": ""}
     if message.content.startswith(f"{prefix}"):
         user_input = parse_command(message.content)
+    else:
+        return
+
+    # Add the guild to the guilds list if it's not in it already
+    if not message.guild.name in guild_list.keys():
+        guild_list[message.guild.name] = set()
+
+    pugs = guild_list[message.guild.name]
 
     ################################################################################
     ######## Help function
@@ -68,11 +78,6 @@ async def on_message(message):
 
         await message.author.send(embed=help_embed)
 
-    # Add the guild to the guilds list if it's not in it already
-    if not message.guild.name in guild_list.keys():
-        guild_list[message.guild.name] = set()
-
-    pugs = guild_list[message.guild.name]
 
     ################################################################################
     ######## Creating a pug
