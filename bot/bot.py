@@ -33,8 +33,8 @@ async def check_age():
         await asyncio.sleep(1)
         for pugs in guild_list.copy().values():
             for pug in pugs.copy():
-                # If a pug has been inactive for more than 10 minutes
-                if time.time() - pug.last_action > 2 and pug.active == 0:
+                # If a pug has been inactive for more than 30 minutes
+                if time.time() - pug.last_action > 1800 and pug.active == 0:
                     await pug.channel.send(f"`{pug.name}` was deleted for inactivity.")
                     if pug.status:
                         await pug.status.delete()
