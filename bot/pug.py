@@ -1,9 +1,9 @@
-from team import Team
-from utils import find_in_list
+from .team import Team
+from .utils import find_in_list
 
 class Pug:
 
-    def __init__(self, name, creator, max_size, teams=[], players=[], status=None, active=0):
+    def __init__(self, name, creator, max_size, last_action, teams=[], players=[], channel=None, status=None, active=0):
         """
         `teams` is a dictionary of the following shape:
             {
@@ -17,8 +17,10 @@ class Pug:
         self.name = name
         self.creator = creator
         self.max_size = max_size
+        self.last_action = last_action
         self.teams = teams
         self.players = players
+        self.channel = channel
         self.status = status
         self.active = active
 

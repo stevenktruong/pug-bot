@@ -1,5 +1,6 @@
 import discord
-from config import prefix
+import time
+from .config import prefix
 
 def parse_command(string):
     """
@@ -110,3 +111,5 @@ async def update_status(channel, pug):
     if pug.status:
         await pug.status.delete()
     pug.status = await channel.send(embed=new_status)
+    pug.channel = pug.status.channel
+    pug.last_action = time.time()

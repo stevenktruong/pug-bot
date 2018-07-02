@@ -3,6 +3,8 @@ A bot for managing pick-up games (aka scrims) on Discord.
 
 The bot is programmed entirely in Python 3, and it makes use of the [discord.py (rewrite)](https://github.com/Rapptz/discord.py) package.
 
+This bot *probably* shouldn't be used to learn from. I didn't use the `commands` extension from `discord.ext` since this bot was a learning project for me--this is my first Python project and I didn't want to program with too much abstraction.
+
 ## Introduction
 The creation of this bot was inspired by the daily League of Legends 10-mans in my guild.
 
