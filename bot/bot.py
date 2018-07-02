@@ -66,7 +66,7 @@ async def on_message(message):
 
     # help is a special case since it takes different parameters
     if user_input["command"] == "help":
-        await commands.help(message, client.user.name)
+        await commands["help"](message, client.user.name)
     elif user_input["command"] in commands.keys():
         await commands[user_input["command"]](message, pugs, user_input)
 
