@@ -30,6 +30,7 @@ Here's the list of commands:
 | :---- | :----
 | `..help` | `pug-bot` will private message you a list of commands and their usage (i.e., basically everything in here)
 | `..create [name] [size]` | Create a PUG with the given name and size
+| `..owner [number]` | Change the PUG owner
 | `..join [name]` | Join the PUG with the given name
 | `..leave` | Leave the PUG you're currently in
 | `..cancel` | Delete the PUG you created
@@ -42,6 +43,7 @@ Here's the list of commands:
 | `..random [teams]` | Randomly create teams in your PUG, if there're enough people
 | `..random captains [teams]` | Randomly assign captains in your PUG, if there're enough people
 | `..team [team name]` | Create a team with the listed name and captain it
+| `..captain [number]` | Make one of your teammates a captain
 | `..rename [team name]` | Rename the team you're the captain of
 | `..pick [number]` | Pick teammates from the player list
 | `..kick [number]` | Kick teammates from your team
