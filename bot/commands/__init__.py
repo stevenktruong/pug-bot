@@ -15,5 +15,8 @@ from .rename import rename
 from .pick import pick
 from .kick import kick
 from .channel import channel
+from .owner import owner
+from .captain import captain
 
 commands = globals()
+commands["👢"] = commands["remove"]

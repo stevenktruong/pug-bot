@@ -15,13 +15,11 @@ async def channel(message, pugs, user_input, client):
 
     # These checks are part of the logic of picking a channel, so they are kept here
     if not 1 <= index+1 <= len(channels):
-        await message.channel.send(INVALID_NUMBER)
-        return
+        return await message.channel.send(INVALID_NUMBER)
 
     # If at least one team channel has picked that channel
     if channels[index] in [team.channel for team in existing_pug.teams]:
-        await message.channel.send(CHANNEL_ALREADY_PICKED)
-        return
+        return await message.channel.send(CHANNEL_ALREADY_PICKED)
 
     # Pick the channel
     existing_pug.find_team(message.author).channel = channels[index]

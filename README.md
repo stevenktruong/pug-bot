@@ -8,7 +8,7 @@ This bot *probably* shouldn't be used to learn from. I didn't use the `commands`
 ## Introduction
 The creation of this bot was inspired by the daily League of Legends 10-mans in my guild.
 
-The bot helps you keep track of teams and players, and it can also randomize teams for you. Another nice feature is that each team can pick a voice channel, and the bot will automatically move teams to their picked channels. After completing a round of games (i.e., when you run `..stop`), the lobby creator has the option to move all players to one voice channel automatically.
+The bot helps you keep track of teams and players, and it can also randomize teams for you. Another nice feature is that each team can pick a voice channel, and the bot will automatically move teams to their picked channels. After completing a round of games (i.e., when you run `..stop`), the lobby owner has the option to move all players to one voice channel automatically.
 
 ![example of usage](https://imgur.com/qv5WTkJ.png)
 

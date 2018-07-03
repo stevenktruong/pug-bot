@@ -49,8 +49,8 @@ async def update_status(channel, pug):
     new_status.set_footer(text=footer_text)
 
     new_status.set_author(
-        name=pug.creator.name,
-        icon_url=pug.creator.avatar_url
+        name=pug.owner.name,
+        icon_url=pug.owner.avatar_url
     )
 
     # Player count
@@ -64,7 +64,8 @@ async def update_status(channel, pug):
     if pug.teams:
         for team in pug.teams:
             if team.members:
-                member_list = "Channel: " + (f"{team.channel}" if team.channel else "Not chosen") + "\n"
+                member_list = f"Wins: {team.wins}\n"
+                member_list += "Channel: " + (f"{team.channel}" if team.channel else "Not chosen") + "\n"
                 member_list += f"`[1]` {team.members[0].name} **(Captain)**\n"
                 for (i, player) in enumerate(team.members[1:]):
                     member_list += f"`[{i+2}]` {player.name}\n"

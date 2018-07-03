@@ -32,14 +32,26 @@ def input_too_long(message, pugs, user_input):
         return INPUT_TOO_LONG
 
 def already_have_pug(message, pugs, user_input):
-    owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
+    owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
     if owned_pug:
         return ALREADY_HAVE_PUG
 
 def have_no_pug(message, pugs, user_input):
-    owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
+    owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
     if not owned_pug:
         return HAVE_NO_PUG
+
+# You need to check `have_no_pug` before checking this
+def pug_already_started(message, pugs, user_input):
+    owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
+    if owned_pug.active == 1:
+        return PUG_ALREADY_STARTED
+
+# You need to check `have_no_pug` before checking this
+def pug_already_stopped(message, pugs, user_input):
+    owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
+    if owned_pug.active == 0:
+        return PUG_ALREADY_STOPPED
 
 def already_in_pug(message, pugs, user_input):
     existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
@@ -58,12 +70,12 @@ def pug_doesnt_exist(message, pugs, user_input):
         return PUG_DOESNT_EXIST
 
 def pug_has_no_teams(message, pugs, user_input):
-    owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
+    owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
     if not owned_pug.teams:
         return PUG_HAS_NO_TEAMS
 
 def channels_not_picked(message, pugs, user_input):
-    owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
+    owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
     if not all(team.channel for team in owned_pug.teams):
         return CHANNELS_NOT_PICKED
 
@@ -77,7 +89,7 @@ def invalid_number(message, pugs, user_input):
 
 # You need to check `invalid_number` before checking this
 def not_enough_players(message, pugs, user_input):
-    owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
+    owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
     arguments = user_input["arguments"].split()
 
     # If there would be more teams than players

@@ -21,6 +21,7 @@ USE_MESSAGE += "\u200b"
 
 COMMANDS_MESSAGE = ""
 COMMANDS_MESSAGE += f"**{prefix}create [name] [size]** - Create a PUG\n"
+COMMANDS_MESSAGE += f"**{prefix}owner [number]** - Change the PUG owner\n"
 COMMANDS_MESSAGE += f"**{prefix}join [name]** - Join the listed PUG\n"
 COMMANDS_MESSAGE += f"**{prefix}leave** - Leave your PUG\n"
 COMMANDS_MESSAGE += f"**{prefix}cancel** - Delete the PUG you created\n"
@@ -33,21 +34,28 @@ COMMANDS_MESSAGE += f"**{prefix}remove [number]** - Remove a player from the PUG
 COMMANDS_MESSAGE += f"**{prefix}random [teams]** - Randomly create teams in your PUG, if possible\n"
 COMMANDS_MESSAGE += f"**{prefix}random captains [teams]** - Randomly assign captains in your PUG, if possible\n"
 COMMANDS_MESSAGE += f"**{prefix}team [team name]** - Create a team with the listed name\n"
-COMMANDS_MESSAGE += f"**{prefix}rename [team name]** - Rename your team if you're team captain\n"
+COMMANDS_MESSAGE += f"**{prefix}captain [number]** - Make one of your teammates a captain\n"
+COMMANDS_MESSAGE += f"**{prefix}rename [team name]** - Rename your team\n"
 COMMANDS_MESSAGE += f"**{prefix}pick [number]** - Pick teammates\n"
 COMMANDS_MESSAGE += f"**{prefix}kick [number]** - Kick teammates from your team\n"
 COMMANDS_MESSAGE += f"**{prefix}channel [number]** - Select your team's voice channel\n"
 COMMANDS_MESSAGE += "\u200b"
 
 # Commands
-PICK_A_CHANNEL_END = "Pick a channel to move all players into. (Type anything else to not move players)"
+PICK_A_CHANNEL = "Pick a channel to move all players into. (Type anything else to not move players)"
+REPORT_WINNER = "Report the winning team. (Type anything else to not report)"
+
+# Success messages
+NO_WINNER = "Didn't change the wins count."
+DELETED_PUG = "Successfully deleted the PUG."
+DONT_MOVE_PLAYERS = "Did not move players."
 
 # Input errors
 INPUT_TOO_LONG = "The input is too long. Try something shorter."
 NO_PUG_NAME = "I couldn't find a PUG name. Please try again."
 TEAM_SIZE_RANGE = "A team size must lie between 1 and 100. Please try again."
 INVALID_NUMBER = "That wasn't a valid number. Please try again."
-NON_NEGATIVE_NUMBER = "The number of teams must be positive. Please try again."
+NON_NEGATIVE_NUMBER = "The number must be positive. Please try again."
 
 # PUG errors
 ALREADY_HAVE_PUG = "You already have an active PUG."
@@ -59,6 +67,8 @@ NOT_IN_PUG = "You're not currently in any PUG."
 PUG_DOESNT_EXIST = "That PUG doesn't exist."
 PUG_IS_FULL = "That PUG is full."
 PUG_HAS_NO_TEAMS = "There are no teams in the PUG."
+PUG_ALREADY_STARTED = "The PUG has already started."
+PUG_ALREADY_STOPPED = "The PUG has already stopped."
 
 # Team errors
 NOT_ENOUGH_PLAYERS = "There aren't enough people for that many teams. Please try again."
@@ -68,11 +78,7 @@ INVALID_PICK = "That wasn't a valid pick. Try again."
 
 # Channel errors
 CHANNEL_ALREADY_PICKED = "That channel has been taken already. Try again."
+CHANNELS_NOT_PICKED = "Not all teams have chosen their channel yet."
 
 # Permission errors
-CHANNELS_NOT_PICKED = "Not all teams have chosen their channel yet."
 NOT_A_CAPTAIN = "Only captains can do that."
-
-# Success messages
-DELETED_PUG = "Successfully deleted the PUG."
-DONT_MOVE_PLAYERS = "Did not move players."
