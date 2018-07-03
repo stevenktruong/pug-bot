@@ -13,6 +13,8 @@ The bot helps you keep track of teams and players, and it can also randomize tea
 ![example of usage](https://imgur.com/qv5WTkJ.png)
 
 ## Usage
+To start the bot, just run `python main.py` after navigating to its location.
+
 The main flow for this bot is as follows:
 
 1. Create a PUG
