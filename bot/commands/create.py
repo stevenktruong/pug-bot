@@ -7,7 +7,7 @@ from ..pug import Pug
 from ..utils import *
 
 @check(input_too_long, already_have_pug)
-async def create(message, pugs, user_input):
+async def create(message, pugs, user_input, client):
     size_string = user_input["arguments"].split().pop()
 
     # Scrape the desired PUG size

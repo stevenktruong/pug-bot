@@ -5,7 +5,7 @@ from ..pug import Pug
 from ..utils import *
 
 @check(already_in_pug, pug_doesnt_exist)
-async def join(message, pugs, user_input):
+async def join(message, pugs, user_input, client):
     pug_name = user_input["arguments"]
     current_pug = find_in_list(lambda pug: pug.name == pug_name, pugs)
 

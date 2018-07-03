@@ -8,7 +8,7 @@ from ..team import Team
 from ..utils import *
 
 @check(have_no_pug, invalid_number, not_enough_players, non_negative_number)
-async def random(message, pugs, user_input):
+async def random(message, pugs, user_input, client):
     arguments = user_input["arguments"].split()
     owned_pug = find_in_list(lambda pug: pug.creator == message.author, pugs)
     num_teams = int(arguments[-1])

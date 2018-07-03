@@ -68,6 +68,6 @@ async def on_message(message):
     if user_input["command"] == "help":
         await commands["help"](message, client.user.name)
     elif user_input["command"] in commands.keys():
-        await commands[user_input["command"]](message, pugs, user_input)
+        await commands[user_input["command"]](message, pugs, user_input, client)
 
 client.run(TOKEN)

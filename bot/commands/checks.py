@@ -1,3 +1,10 @@
+"""
+This module creates a decorator called `check` which takes a list of functions to run
+If any of these checks fail, the decorated function will not run and an error message
+is sent to the Discord channel instead
+"""
+
+
 from ..config import *
 from ..utils import find_in_list
 
@@ -11,11 +18,11 @@ def check(*args):
     """
     def wrapper(function):
         # This is the function to replace the decorated function
-        async def wrapped(message, pugs, user_input):
+        async def wrapped(message, pugs, user_input, client=None):
             for error in [check(message, pugs, user_input) for check in args]:
                 if not error == None:
                     return await message.channel.send(error)
-            await function(message, pugs, user_input)
+            await function(message, pugs, user_input, client)
         return wrapped
     return wrapper
 

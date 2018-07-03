@@ -6,7 +6,7 @@ from ..team import Team
 from ..utils import *
 
 @check(input_too_long, not_in_pug, team_already_exists, already_in_team)
-async def team(message, pugs, user_input):
+async def team(message, pugs, user_input, client):
     existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
     team_name = user_input["arguments"]
 
