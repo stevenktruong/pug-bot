@@ -12,6 +12,14 @@ The bot helps you keep track of teams and players, and it can also randomize tea
 
 ![example of usage](https://imgur.com/qv5WTkJ.png)
 
+## Dependencies
+[`discord.py` (rewrite)](https://github.com/Rapptz/discord.py)
+
+If `pip` is installed, you should install the package with:
+```
+pip install -U git+https://github.com/Rapptz/discord.py@rewrite
+```
+
 ## Usage
 To start the bot, just run `python main.py` after navigating to its location.
 
