@@ -1,7 +1,7 @@
 # `pug-bot`
 A bot for managing pick-up games (aka scrims) on Discord.
 
-The bot is programmed entirely in Python 3, and it makes use of the [discord.py (rewrite)](https://github.com/Rapptz/discord.py) package.
+The bot is programmed entirely in Python 3, and it makes use of the [discord.py](https://github.com/Rapptz/discord.py) package.
 
 This bot *probably* shouldn't be used to learn from. I didn't use the `commands` extension from `discord.ext` since this bot was a learning project for me--this is my first Python project and I didn't want to program with too much abstraction.
 
@@ -13,7 +13,7 @@ The bot helps you keep track of teams and players, and it can also randomize tea
 ![example of usage](https://imgur.com/qv5WTkJ.png)
 
 ## Dependencies
-[`discord.py` (rewrite)](https://github.com/Rapptz/discord.py)
+[`discord.py`](https://github.com/Rapptz/discord.py)
 
 If `pip` is installed, you should install the package with:
 ```
