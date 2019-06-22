@@ -1,1 +1,2 @@
-from bot import bot
+import importlib
+importlib.import_module("pug-bot")

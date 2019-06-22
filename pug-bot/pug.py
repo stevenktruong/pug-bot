@@ -1,6 +1,7 @@
 from .team import Team
 from .utils import find_in_list
 
+
 class Pug:
 
     def __init__(self, name, owner, max_size, last_action, teams=[], players=[], channel=None, status=None, active=0):
@@ -51,7 +52,7 @@ class Pug:
             raise ValueError(f"{player_num} is not a valid number")
         if self.find_team(self.players[player_num-1]):
             raise ValueError("That player is already in a team")
-        
+
         self.find_team(captain).add_member(self.players[player_num-1])
 
     def remove_from_team(self, captain, player_num):
@@ -65,14 +66,14 @@ class Pug:
             raise ValueError("The passed captain is not a captain")
         if not player_num-1 in range(len(current_team.members)):
             raise ValueError(f"{player_num} is not a valid number")
-        
+
         current_team.remove_member(current_team.members[player_num-1])
 
         # If the team is empty after removing a player, delete the team
         if not current_team.members:
             self.teams.remove(current_team)
             del current_team
-        
+
     def add_player(self, player):
         if len(self.players) < self.max_size:
             self.players.append(player)
@@ -87,7 +88,8 @@ class Pug:
         self.players.remove(player)
 
         # Remove the player from any lists
-        current_team = find_in_list(lambda team: player in team.members, self.teams)
+        current_team = find_in_list(
+            lambda team: player in team.members, self.teams)
         if current_team:
             current_team.remove_member(player)
 
@@ -95,12 +97,13 @@ class Pug:
             if not current_team.members:
                 self.teams.remove(current_team)
                 del current_team
-        
+
     def is_captain(self, player):
         return player in map(lambda team: team.members[0], self.teams)
-            
+
     def find_team(self, player):
-        current_team = find_in_list(lambda team: player in team.members, self.teams)
+        current_team = find_in_list(
+            lambda team: player in team.members, self.teams)
         if current_team:
             return current_team
         else:
@@ -117,5 +120,3 @@ class Pug:
                 yield (i+1, player)
             else:
                 yield (-(i+1), player)
-
-        

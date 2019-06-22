@@ -16,7 +16,7 @@ from .commands import commands
 TOKEN = os.getenv('TOKEN') if os.getenv('TOKEN') else TOKEN
 
 ################################################################
-######## Bot code
+# Bot code
 ################################################################
 # guild_list stores all pug information and is of the form
 # {
@@ -28,6 +28,8 @@ guild_list = {}
 client = discord.Client()
 
 # Deletes PUGs that are too old
+
+
 async def check_age():
     while True:
         await asyncio.sleep(1)
@@ -40,12 +42,14 @@ async def check_age():
                         await pug.status.delete()
                     pugs.remove(pug)
 
+
 @client.event
 async def on_ready():
     print("Successfully logged in")
     print(f"Username: {client.user.name}")
     print(f"ID: {client.user.id}")
     client.loop.create_task(check_age())
+
 
 @client.event
 async def on_message(message):
