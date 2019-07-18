@@ -4,7 +4,7 @@ from ..config import *
 from ..pug import Pug
 from ..utils import *
     
-@check(have_no_pug, pug_already_stopped, invalid_number)
+@check(have_no_pug, invalid_number)
 async def win(message, pugs, user_input, client):
     owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
     team_num = int(user_input["arguments"])
