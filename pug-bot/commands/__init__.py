@@ -17,6 +17,7 @@ from .rename import rename
 from .pick import pick
 from .kick import kick
 from .channel import channel
+from .win import win
 
 commands = globals()
 
