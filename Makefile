@@ -1,6 +1,9 @@
+# Settings
+PIP = pip
+
 all: init
 
 init:
-	pip install -r requirements.txt
+	$(PIP) install -r requirements.txt
 
 .PHONY: init
