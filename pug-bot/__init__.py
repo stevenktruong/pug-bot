@@ -60,6 +60,7 @@ async def on_message(message):
     # Parse the user input
     user_input = {"command": ""}
     if message.content.startswith(f"{prefix}"):
+        print(f"{message.author} issued command {message.content}")
         user_input = parse_command(message.content)
 
     # Add the guild to the guilds list if it's not in it already
