@@ -19,10 +19,10 @@ def check(*args):
     def wrapper(function):
         # This is the function to replace the decorated function
         async def wrapped(message, pugs, user_input, client=None):
-            for error in [check(message, pugs, user_input) for check in args]:
+            for check in args:
+                error = check(message, pugs, user_input)
                 if not error == None:
-                    await message.channel.send(error)
-                    return
+                    return await message.channel.send(error)
             await function(message, pugs, user_input, client)
         return wrapped
     return wrapper
