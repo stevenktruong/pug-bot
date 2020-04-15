@@ -21,7 +21,8 @@ def check(*args):
         async def wrapped(message, pugs, user_input, client=None):
             for error in [check(message, pugs, user_input) for check in args]:
                 if not error == None:
-                    return await message.channel.send(error)
+                    await message.channel.send(error)
+                    return
             await function(message, pugs, user_input, client)
         return wrapped
     return wrapper
