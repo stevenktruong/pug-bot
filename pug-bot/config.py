@@ -40,6 +40,7 @@ COMMANDS_MESSAGE += f"**{prefix}pick [number]** - Pick teammates\n"
 COMMANDS_MESSAGE += f"**{prefix}kick [number]** - Kick teammates from your team\n"
 COMMANDS_MESSAGE += f"**{prefix}channel [number]** - Select your team's voice channel\n"
 COMMANDS_MESSAGE += f"**{prefix}win [number]** - Add a win to a team\n"
+COMMANDS_MESSAGE += f"**{prefix}roll [number] [number]** - Randomly pick a number\n"
 COMMANDS_MESSAGE += "\u200b"
 
 # Commands
@@ -57,6 +58,7 @@ NO_PUG_NAME = "I couldn't find a PUG name. Please try again."
 TEAM_SIZE_RANGE = "A team size must lie between 1 and 100. Please try again."
 INVALID_NUMBER = "That wasn't a valid number. Please try again."
 NON_NEGATIVE_NUMBER = "The number must be positive. Please try again."
+INVALID_RANGE = "That wasn't a valid range of numbers. Please try again."
 
 # PUG errors
 ALREADY_HAVE_PUG = "You already have an active PUG."

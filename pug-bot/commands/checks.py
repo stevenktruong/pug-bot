@@ -88,6 +88,19 @@ def invalid_number(message, pugs, user_input):
     except:
         return INVALID_NUMBER
 
+def invalid_range(message, pugs, user_input):
+    arguments = user_input["arguments"].split()
+    # Attempt to cast the input as an int
+    try:
+        int(arguments[0])
+        int(arguments[1])
+    except:
+        return INVALID_NUMBER
+
+    if int(arguments[0]) > int(arguments[1]):
+        return INVALID_RANGE
+
+
 # You need to check `invalid_number` before checking this
 def not_enough_players(message, pugs, user_input):
     owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)

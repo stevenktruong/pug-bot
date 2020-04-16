@@ -18,6 +18,7 @@ from .pick import pick
 from .kick import kick
 from .channel import channel
 from .win import win
+from .roll import roll
 
 commands = globals()
 
