@@ -11,7 +11,8 @@ async def start(message, pugs, user_input, client):
     # Move the team members to their channel
     for team in owned_pug.teams:
         for member in team.members:
-            await member.move_to(team.channel)
+            if member.voice.channel is not None:
+                await member.move_to(team.channel)
 
     owned_pug.active = 1
     await update_status(message.channel, owned_pug)

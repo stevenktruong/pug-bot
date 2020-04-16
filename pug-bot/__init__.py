@@ -28,8 +28,6 @@ guild_list = {}
 client = discord.Client()
 
 # Deletes PUGs that are too old
-
-
 async def check_age():
     while True:
         await asyncio.sleep(1)
@@ -60,7 +58,11 @@ async def on_message(message):
     # Parse the user input
     user_input = {"command": ""}
     if message.content.startswith(f"{prefix}"):
-        print(f"{message.author} issued command {message.content}")
+        print("========")
+        print(f"Timestamp: {message.created_at}")
+        print(f"User: {message.author}")
+        print(f"Command: {message.content}")
+        print()
         user_input = parse_command(message.content)
 
     # Add the guild to the guilds list if it's not in it already
