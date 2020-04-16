@@ -22,7 +22,7 @@ If `pip` is installed, you can install the package with `make`.
 
 ## Usage
 
-The bot searches for the environment variable `TOKEN` with your API token. If you don't know how to set an environment variable, then you can just place it in `pug-bot/apitoken.py`. To start the bot, just run `python main.py` after navigating to its location.
+The bot searches for the environment variable `TOKEN` with your API token. If you don't know how to set an environment variable, then you can just place it in `pug-bot/apitoken.py`. To start the bot, just run `make start`.
 
 The main flow for this bot is as follows:
 
@@ -57,3 +57,7 @@ Here's the list of commands:
 | `..pick [number]`           | Pick teammates from the player list                                                                        |
 | `..kick [number]`           | Kick teammates from your team                                                                              |
 | `..channel`                 | Select your team's voice channel                                                                           |
+| `..win [number]`            | Add a win to a team                                                                                        |
+| `..roll [number] [number]`  | Randomly pick a number                                                                                     |
+
+​

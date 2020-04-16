@@ -27,6 +27,12 @@ async def help(message, username):
         inline=False
     )
 
+    help_embed.add_field(
+        name=ADD,
+        value=ADD_MESSAGE,
+        inline=False
+    )
+
     help_embed.set_footer(
         text=FOOTER_TEXT,
         icon_url=FOOTER_ICON

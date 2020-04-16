@@ -1,9 +1,11 @@
 # Settings
-PIP = pip
-
-all: init
+PIP = pip3
+PYTHON = python3
 
 init:
 	$(PIP) install -r requirements.txt
 
-.PHONY: init
+start:
+	$(PYTHON) main.py
+
+.PHONY: init start

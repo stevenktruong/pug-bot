@@ -61,7 +61,9 @@ async def on_message(message):
         print("========")
         print(f"Timestamp: {message.created_at}")
         print(f"User: {message.author}")
+        print(f"Guild: {message.guild}")
         print(f"Command: {message.content}")
+        print(f"Jump to message: {message.jump_url}")
         print()
         user_input = parse_command(message.content)
 

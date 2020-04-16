@@ -3,10 +3,11 @@ prefix = ".."
 
 # Messages
 # Help messages
-TITLE = "🤖 `pug-bot` (Pick-up Bot)"
-DESCRIPTION = "I'm a bot for managing pick-up games (aka a scrim)."
-HOW_TO_USE = "🤔 How to Use Me"
-COMMANDS = "⌨️ Available Commands"
+TITLE = "🤖 `pug-bot` (Pick-Up Game Bot)"
+DESCRIPTION = "I'm a bot for managing pick-up games (aka scrims)."
+HOW_TO_USE = "🤔 How to use me"
+COMMANDS = "⌨️ Available commands"
+ADD = "🤝 Add me to your server"
 FOOTER_TEXT = "https://github.com/stevenktruong/pug-bot"
 FOOTER_ICON = "https://camo.githubusercontent.com/7710b43d0476b6f6d4b4b2865e35c108f69991f3/68747470733a2f2f7777772e69636f6e66696e6465722e636f6d2f646174612f69636f6e732f6f637469636f6e732f313032342f6d61726b2d6769746875622d3235362e706e67"
 
@@ -42,6 +43,10 @@ COMMANDS_MESSAGE += f"**{prefix}channel [number]** - Select your team's voice ch
 COMMANDS_MESSAGE += f"**{prefix}win [number]** - Add a win to a team\n"
 COMMANDS_MESSAGE += f"**{prefix}roll [number] [number]** - Randomly pick a number\n"
 COMMANDS_MESSAGE += "\u200b"
+
+ADD_MESSAGE = ""
+ADD_MESSAGE += "https://discordapp.com/api/oauth2/authorize?client_id=460550975711870996&permissions=16870400&scope=bot"
+ADD_MESSAGE += "\u200b"
 
 # Commands
 PICK_A_CHANNEL = "Pick a channel to move all players into. (Type anything else to not move players)"
