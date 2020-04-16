@@ -51,6 +51,8 @@ REPORT_WINNER = "Report the winning team. (Type anything else to not report)"
 NO_WINNER = "Didn't change the wins count."
 DELETED_PUG = "Successfully deleted the PUG."
 DONT_MOVE_PLAYERS = "Did not move players."
+def ROLLED(number)
+    return f"Rolled {number}."
 
 # Input errors
 INPUT_TOO_LONG = "The input is too long. Try something shorter."
