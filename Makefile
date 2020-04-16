@@ -6,6 +6,6 @@ init:
 	$(PIP) install -r requirements.txt
 
 start:
-	$(PYTHON) main.py
+	$(shell $(PYTHON) main.py >&2)
 
 .PHONY: init start

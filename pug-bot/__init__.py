@@ -46,6 +46,7 @@ async def on_ready():
     print("Successfully logged in")
     print(f"Username: {client.user.name}")
     print(f"ID: {client.user.id}")
+    print()
     client.loop.create_task(check_age())
 
 
