@@ -5,7 +5,7 @@ from ..pug import Pug
 from ..utils import *
     
 @check(have_no_pug, invalid_number)
-async def win(message, pugs, user_input, client):
+async def removewin(message, pugs, user_input, client):
     owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
     team_num = int(user_input["arguments"])
 
@@ -14,5 +14,6 @@ async def win(message, pugs, user_input, client):
         return await message.channel.send(INVALID_NUMBER)
 
     # Update wins
-    owned_pug.teams[team_num-1].wins += 1
+    if owned_pug.teams[team_num-1].wins > 0:
+        owned_pug.teams[team_num-1].wins -= 1
     await update_status(message.channel, owned_pug)

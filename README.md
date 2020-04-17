@@ -48,16 +48,17 @@ Here's the list of commands:
 | `..close`                   | Close a PUG, i.e., you can't interact with the PUG anymore                                                 |
 | `..reset`                   | Remove all teams in your PUG                                                                               |
 | `..refresh`                 | Refresh the message with the PUG status                                                                    |
-| `..remove [number]`         | Remove a player from your PUG                                                                              |
+| `..remove [numbers]`        | Remove players from your PUG                                                                               |
 | `..random [teams]`          | Randomly create teams in your PUG, if there're enough people                                               |
 | `..random captains [teams]` | Randomly assign captains in your PUG, if there're enough people                                            |
 | `..team [team name]`        | Create a team with the listed name and captain it                                                          |
 | `..captain [number]`        | Make one of your teammates a captain                                                                       |
 | `..rename [team name]`      | Rename the team you're the captain of                                                                      |
-| `..pick [number]`           | Pick teammates from the player list                                                                        |
-| `..kick [number]`           | Kick teammates from your team                                                                              |
+| `..pick [numbers]`          | Pick teammates from the player list                                                                        |
+| `..kick [numbers]`          | Kick teammates from your team                                                                              |
 | `..channel`                 | Select your team's voice channel                                                                           |
-| `..win [number]`            | Add a win to a team                                                                                        |
+| `..addwin [number]`         | Add a win to a team                                                                                        |
+| `..removewin [number]`      | Remove a win from a team                                                                                   |
 | `..roll [number] [number]`  | Randomly pick a number                                                                                     |
 
 ​

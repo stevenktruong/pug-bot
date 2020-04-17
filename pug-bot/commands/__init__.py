@@ -17,7 +17,8 @@ from .rename import rename
 from .pick import pick
 from .kick import kick
 from .channel import channel
-from .win import win
+from .addwin import addwin
+from .removewin import removewin
 from .roll import roll
 
 commands = globals()
