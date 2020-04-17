@@ -17,10 +17,10 @@ async def stop(message, pugs, user_input, client):
     try:
         index = int(result.content)-1
     except:
-        return await message.channel.send(DONT_MOVE_PLAYERS)
+        await message.channel.send(DONT_MOVE_PLAYERS)
     else:
         if not 0 <= index < len(channels):
-            return await message.channel.send(DONT_MOVE_PLAYERS)
+            await message.channel.send(DONT_MOVE_PLAYERS)
         for player in owned_pug.players:
             await player.move_to(channels[index])
 
@@ -34,10 +34,10 @@ async def stop(message, pugs, user_input, client):
     try:
         index = int(result.content)-1
     except:
-        return await message.channel.send(NO_WINNER)
+        await message.channel.send(NO_WINNER)
     else:
         if not 0 <= index < len(owned_pug.teams):
-            return await message.channel.send(NO_WINNER)
+            await message.channel.send(NO_WINNER)
         owned_pug.teams[index].wins += 1
 
     # Stop pug
