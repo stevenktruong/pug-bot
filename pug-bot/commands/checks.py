@@ -88,6 +88,14 @@ def invalid_number(message, pugs, user_input):
     except:
         return INVALID_NUMBER
 
+def invalid_number_multiple(message, pugs, user_input):
+    arguments = user_input["arguments"].split()
+    for argument in arguments:
+        try:
+            int(argument)
+        except:
+            return INVALID_NUMBER
+
 def invalid_range(message, pugs, user_input):
     arguments = user_input["arguments"].split()
     # Attempt to cast the input as an int
