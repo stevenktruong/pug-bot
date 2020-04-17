@@ -30,7 +30,6 @@ COMMANDS_MESSAGE += f"**{prefix}start** - Starts your PUG and moves teams to the
 COMMANDS_MESSAGE += f"**{prefix}stop** - Stops the PUG and move players to a channel\n"
 COMMANDS_MESSAGE += f"**{prefix}close** - Close a PUG\n"
 COMMANDS_MESSAGE += f"**{prefix}reset** - Reset a PUG\n"
-COMMANDS_MESSAGE += f"**{prefix}refresh** - Show the PUG status\n"
 COMMANDS_MESSAGE += f"**{prefix}remove [numbers]** - Remove players from the PUG\n"
 COMMANDS_MESSAGE += f"**{prefix}random [teams]** - Randomly create teams in your PUG, if possible\n"
 COMMANDS_MESSAGE += f"**{prefix}random captains [teams]** - Randomly assign captains in your PUG, if possible\n"
@@ -40,9 +39,8 @@ COMMANDS_MESSAGE += f"**{prefix}rename [team name]** - Rename your team\n"
 COMMANDS_MESSAGE += f"**{prefix}pick [numbers]** - Pick teammates\n"
 COMMANDS_MESSAGE += f"**{prefix}kick [numbers]** - Kick teammates from your team\n"
 COMMANDS_MESSAGE += f"**{prefix}channel [number]** - Select your team's voice channel\n"
-COMMANDS_MESSAGE += f"**{prefix}addwin [number]** - Add a win to a team\n"
-COMMANDS_MESSAGE += f"**{prefix}removewin [number]** - Remove a win from a team\n"
 COMMANDS_MESSAGE += f"**{prefix}roll [number] [number]** - Randomly pick a number\n"
+COMMANDS_MESSAGE += f"\nView the full list by checking out the GitHub!\n"
 COMMANDS_MESSAGE += "\u200b"
 
 ADD_MESSAGE = ""
@@ -57,8 +55,7 @@ REPORT_WINNER = "Report the winning team. (Type anything else to not report)"
 NO_WINNER = "Didn't change the wins count."
 DELETED_PUG = "Successfully deleted the PUG."
 DONT_MOVE_PLAYERS = "Did not move players."
-def ROLLED(number):
-    return f"Rolled {number}."
+ROLLED = lambda number: f"Rolled {number}."
 
 # Input errors
 INPUT_TOO_LONG = "The input is too long. Try something shorter."
