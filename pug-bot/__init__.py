@@ -1,6 +1,7 @@
 import asyncio
 import os
 import time
+from datetime import datetime
 from random import randint, shuffle
 
 import discord
@@ -43,7 +44,8 @@ async def check_age():
 
 @client.event
 async def on_ready():
-    print("Successfully logged in")
+    print("================ Successful login")
+    print(f"Timestamp: {datetime.now()}")
     print(f"Username: {client.user.name}")
     print(f"ID: {client.user.id}")
     print()

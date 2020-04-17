@@ -1,6 +1,6 @@
 # Settings
 PIP = pip3
-PYTHON = python3
+PYTHON = python3 -u
 
 init:
 	$(PIP) install -r requirements.txt
