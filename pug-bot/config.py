@@ -58,6 +58,7 @@ DONT_MOVE_PLAYERS = "Did not move players."
 ROLLED = lambda number: f"Rolled {number}."
 
 # Input errors
+NOT_A_COMMAND = "That wasn't a valid command. Please try again."
 INPUT_TOO_LONG = "The input is too long. Try something shorter."
 NO_PUG_NAME = "I couldn't find a PUG name. Please try again."
 TEAM_SIZE_RANGE = "A team size must lie between 1 and 100. Please try again."

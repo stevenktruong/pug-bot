@@ -67,7 +67,6 @@ async def on_message(message):
         print(f"Guild: {message.guild}")
         print(f"Command: {message.content}")
         print(f"Jump to message: {message.jump_url}")
-        print()
         user_input = parse_command(message.content)
 
     # Add the guild to the guilds list if it's not in it already
@@ -77,9 +76,16 @@ async def on_message(message):
     pugs = guild_list[message.guild.name]
 
     # help is a special case since it takes different parameters
+    error_message = None
     if user_input["command"] == "help":
-        await commands["help"](message, client.user.name)
+        error_message = await commands["help"](message, client.user.name)
     elif user_input["command"] in commands.keys():
-        await commands[user_input["command"]](message, pugs, user_input, client)
+        error_message = await commands[user_input["command"]](message, pugs, user_input, client)
+    else:
+        error_message = await message.channel.send(NOT_A_COMMAND)
+    
+    if error_message is not None:
+        print(f"Error: {error_message.content}")
+    print()
 
 client.run(TOKEN)
