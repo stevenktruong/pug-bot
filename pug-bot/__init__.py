@@ -1,7 +1,8 @@
 import asyncio
 import os
 import time
-from datetime import datetime
+import pytz
+from datetime import datetime, timezone
 from random import randint, shuffle
 
 import discord
@@ -15,6 +16,9 @@ from .commands import commands
 
 # Get the token from environment variables. Otherwise, get it from the config
 TOKEN = os.getenv('TOKEN') if os.getenv('TOKEN') else TOKEN
+
+# Initialize timezone (from config.py) for logs
+tz = pytz.timezone(TIMEZONE)
 
 ################################################################
 # Bot code
@@ -45,7 +49,7 @@ async def check_age():
 @client.event
 async def on_ready():
     print("================ Successful login")
-    print(f"Timestamp: {datetime.now()}")
+    print(f"Timestamp: {datetime.now().strftime('%c')}")
     print(f"Username: {client.user.name}")
     print(f"ID: {client.user.id}")
     print()
@@ -62,7 +66,7 @@ async def on_message(message):
     user_input = {"command": ""}
     if message.content.startswith(f"{prefix}"):
         print("========")
-        print(f"Timestamp: {message.created_at}")
+        print(f"Timestamp: {tz.fromutc(message.created_at).strftime('%c')}")
         print(f"User: {message.author}")
         print(f"Guild: {message.guild}")
         print(f"Command: {message.content}")

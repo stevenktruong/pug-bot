@@ -91,3 +91,6 @@ CHANNELS_NOT_PICKED = "Not all teams have chosen their channel yet."
 
 # Permission errors
 NOT_A_CAPTAIN = "Only captains can do that."
+
+# Log configuration
+TIMEZONE = "America/Los_Angeles"
