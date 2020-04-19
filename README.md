@@ -14,11 +14,9 @@ The bot helps you keep track of teams and players, and it can also randomize tea
 
 ![example of usage](https://imgur.com/qv5WTkJ.png)
 
-## Dependencies
+## Requirements
 
-[`discord.py`](https://github.com/Rapptz/discord.py)
-
-If `pip` is installed, you can install the package with `make`.
+The bot requires at least Python 3.6. If `pip` is installed, you can install dependencies with `make`.
 
 ## Usage
 
