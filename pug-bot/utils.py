@@ -14,7 +14,7 @@ def parse_command(string):
     # Remove the prefix and split the command
     split_string = string[len(prefix):].split()
     return {
-        "command": split_string[0],
+        "command": split_string[0] if len(split_string) > 0 else "",
         "arguments": " ".join(split_string[1:])
     }
 
