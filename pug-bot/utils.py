@@ -25,13 +25,14 @@ def find_in_list(query, _list):
     item = list(filter(query, _list))
     return item[0] if item else None
 
-async def update_status(channel, pug, active_status):
+async def update_status(channel, pug, active_status=None):
     """
     Replace the old pug embed with an updated one in the given channel and update pug.active
     """
-    pug.active = active_status
-    color = PUG_EMBED_COLORS[active_status]
-    footer_text = PUG_EMBED_FOOTER_MESSAGES[active_status]
+    if active_status is not None:
+        pug.active = active_status
+    color = PUG_EMBED_COLORS[pug.active]
+    footer_text = PUG_EMBED_FOOTER_MESSAGES[pug.active]
 
     new_status = discord.Embed(
         title=pug.name,
