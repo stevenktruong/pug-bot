@@ -41,5 +41,4 @@ async def stop(message, pugs, user_input, client):
         owned_pug.teams[index].wins += 1
 
     # Stop pug
-    owned_pug.active = 0
-    await update_status(message.channel, owned_pug)
+    await update_status(message.channel, owned_pug, PUG_STOPPED)

@@ -45,13 +45,13 @@ def have_no_pug(message, pugs, user_input):
 # You need to check `have_no_pug` before checking this
 def pug_already_started(message, pugs, user_input):
     owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
-    if owned_pug.active == 1:
+    if owned_pug.active == PUG_STARTED:
         return PUG_ALREADY_STARTED
 
 # You need to check `have_no_pug` before checking this
 def pug_already_stopped(message, pugs, user_input):
     owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
-    if owned_pug.active == 0:
+    if owned_pug.active == PUG_STOPPED:
         return PUG_ALREADY_STOPPED
 
 def already_in_pug(message, pugs, user_input):

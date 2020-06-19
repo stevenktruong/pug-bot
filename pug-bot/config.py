@@ -1,3 +1,5 @@
+import discord
+
 # Bot Configuration
 prefix = ".."
 
@@ -50,6 +52,24 @@ ADD_MESSAGE += "\u200b"
 # Commands
 PICK_A_CHANNEL = "Pick a channel to move all players into. (Type anything else to not move players)"
 REPORT_WINNER = "Report the winning team. (Type anything else to not report)"
+
+# Manifest constants
+PUG_STOPPED = 0
+PUG_STARTED = 1
+PUG_ENDED = 2
+
+# PUG embed
+PUG_EMBED_FOOTER_MESSAGES = {
+    PUG_STOPPED: "This PUG is stopped.",
+    PUG_STARTED: "This PUG has started.",
+    PUG_ENDED: "This PUG has ended."
+}
+
+PUG_EMBED_COLORS = {
+    PUG_STOPPED: discord.Color.red(),
+    PUG_STARTED: discord.Color.green(),
+    PUG_ENDED: discord.Color.blue()
+}
 
 # Success messages
 NO_WINNER = "Didn't change the wins count."

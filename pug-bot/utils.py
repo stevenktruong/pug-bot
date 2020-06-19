@@ -1,6 +1,6 @@
 import discord
 import time
-from .config import prefix
+from .config import *
 
 def parse_command(string):
     """
@@ -25,19 +25,13 @@ def find_in_list(query, _list):
     item = list(filter(query, _list))
     return item[0] if item else None
 
-async def update_status(channel, pug):
+async def update_status(channel, pug, active_status):
     """
-    Replace the old pug embed with an updated one in the given channel
+    Replace the old pug embed with an updated one in the given channel and update pug.active
     """
-    if pug.active == 0:   # PUG hasn't started
-        color = discord.Color.red()
-        footer_text = "This PUG is stopped."
-    elif pug.active == 1: # PUG has started
-        color = discord.Color.green()
-        footer_text = "This PUG has started."
-    elif pug.active == 2: # PUG finished
-        color = discord.Color.blue()
-        footer_text = "This PUG has ended."
+    pug.active = active_status
+    color = PUG_EMBED_COLORS[active_status]
+    footer_text = PUG_EMBED_FOOTER_MESSAGES[active_status]
 
     new_status = discord.Embed(
         title=pug.name,

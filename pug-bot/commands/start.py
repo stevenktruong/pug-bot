@@ -17,5 +17,4 @@ async def start(message, pugs, user_input, client):
             if member.voice.channel is not None:
                 await member.move_to(team.channel)
 
-    owned_pug.active = 1
-    await update_status(message.channel, owned_pug)
+    await update_status(message.channel, owned_pug, PUG_STARTED)

@@ -9,8 +9,7 @@ async def close(message, pugs, user_input, client):
     owned_pug = find_in_list(lambda pug: pug.owner == message.author, pugs)
 
     # Close the pug
-    owned_pug.active = 2
-    await update_status(message.channel, owned_pug)
+    await update_status(message.channel, owned_pug, PUG_ENDED)
 
     # Remove the reference to the pug
     pugs.remove(owned_pug)
