@@ -33,30 +33,31 @@ The main flow for this bot is as follows:
 
 Here's the list of commands:
 
-| Command                     | Action                                                                                                     |
-| :-------------------------- | :--------------------------------------------------------------------------------------------------------- |
-| `..help`                    | `pug-bot` will private message you a list of commands and their usage (i.e., basically everything in here) |
-| `..create [name] [size]`    | Create a PUG with the given name and size                                                                  |
-| `..owner [number]`          | Change the PUG owner                                                                                       |
-| `..join [name]`             | Join the PUG with the given name                                                                           |
-| `..leave`                   | Leave the PUG you're currently in                                                                          |
-| `..cancel`                  | Delete the PUG you created                                                                                 |
-| `..start`                   | Starts your PUG and moves teams to their channels                                                          |
-| `..stop`                    | Stops the PUG and move players to a channel                                                                |
-| `..close`                   | Close a PUG, i.e., you can't interact with the PUG anymore                                                 |
-| `..reset`                   | Remove all teams in your PUG                                                                               |
-| `..refresh`                 | Refresh the message with the PUG status                                                                    |
-| `..remove [numbers]`        | Remove players from your PUG                                                                               |
-| `..random [teams]`          | Randomly create teams in your PUG, if there're enough people                                               |
-| `..random captains [teams]` | Randomly assign captains in your PUG, if there're enough people                                            |
-| `..team [team name]`        | Create a team with the listed name and captain it                                                          |
-| `..captain [number]`        | Make one of your teammates a captain                                                                       |
-| `..rename [team name]`      | Rename the team you're the captain of                                                                      |
-| `..pick [numbers]`          | Pick teammates from the player list                                                                        |
-| `..kick [numbers]`          | Kick teammates from your team                                                                              |
-| `..channel`                 | Select your team's voice channel                                                                           |
-| `..addwin [number]`         | Add a win to a team                                                                                        |
-| `..removewin [number]`      | Remove a win from a team                                                                                   |
-| `..roll [number] [number]`  | Randomly pick a number                                                                                     |
+| Command                       | Action                                                                                                     |
+| :---------------------------- | :--------------------------------------------------------------------------------------------------------- |
+| `..help`                      | `pug-bot` will private message you a list of commands and their usage (i.e., basically everything in here) |
+| `..create [name] [size]`      | Create a PUG with the given name and size                                                                  |
+| `..owner [number]`            | Change the PUG owner                                                                                       |
+| `..join [name]`               | Join the PUG with the given name                                                                           |
+| `..leave`                     | Leave the PUG you're currently in                                                                          |
+| `..cancel`                    | Delete the PUG you created                                                                                 |
+| `..start`                     | Starts your PUG and moves teams to their channels                                                          |
+| `..stop`                      | Stops the PUG and move players to a channel                                                                |
+| `..close`                     | Close a PUG, i.e., you can't interact with the PUG anymore                                                 |
+| `..reset`                     | Remove all teams in your PUG                                                                               |
+| `..refresh`                   | Refresh the message with the PUG status                                                                    |
+| `..remove [numbers]`          | Remove players from your PUG                                                                               |
+| `..random [teams]`            | Randomly create teams in your PUG, if there're enough people                                               |
+| `..random captains [teams]`   | Randomly assign captains in your PUG, if there're enough people                                            |
+| `..premade captain [numbers]` | Create a team with the listed captain and players                                                          |
+| `..team [team name]`          | Create a team with the listed name                                                                         |
+| `..captain [number]`          | Make one of your teammates a captain                                                                       |
+| `..rename [team name]`        | Rename the team you're the captain of                                                                      |
+| `..pick [numbers]`            | Pick teammates from the player list                                                                        |
+| `..kick [numbers]`            | Kick teammates from your team                                                                              |
+| `..channel`                   | Select your team's voice channel                                                                           |
+| `..addwin [number]`           | Add a win to a team                                                                                        |
+| `..removewin [number]`        | Remove a win from a team                                                                                   |
+| `..roll [number] [number]`    | Randomly pick a number                                                                                     |
 
 ​
