@@ -8,7 +8,7 @@ from ..utils import *
 @check(not_in_pug, invalid_number_multiple)
 async def premade(message, pugs, user_input, client):
     existing_pug = find_in_list(lambda pug: message.author in pug.players, pugs)
-    arguments = set(user_input["arguments"].split())
+    arguments = list(user_input["arguments"].split())
 
     for player_num_string in arguments:
         player_num = int(player_num_string)
