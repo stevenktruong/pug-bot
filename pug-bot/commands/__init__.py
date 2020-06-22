@@ -20,6 +20,7 @@ from .channel import channel
 from .addwin import addwin
 from .removewin import removewin
 from .roll import roll
+from .premade import premade
 
 commands = globals()
 
